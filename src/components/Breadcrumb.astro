@@ -1,4 +1,6 @@
 ---
+import { breadcrumbSchema } from '../lib/schema';
+
 interface Crumb {
 	label: string;
 	href?: string;
@@ -9,7 +11,10 @@ interface Props {
 }
 
 const { items } = Astro.props;
+const schema = breadcrumbSchema(items);
 ---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
 <nav class="breadcrumb" aria-label="Breadcrumb">
 	<ol>

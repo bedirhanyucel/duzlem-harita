@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://duzlemsaharita.com/sitemap-index.xml

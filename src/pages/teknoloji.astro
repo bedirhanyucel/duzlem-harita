@@ -1,0 +1,304 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Icon from '../components/Icon.astro';
+import { company } from '../data/company';
+
+const fieldSystems = [
+	{ icon: 'satellite', title: 'GNSS / RTK', desc: 'Uydu tabanlı hassas konum belirleme sistemleri.' },
+	{ icon: 'target', title: 'Total Station', desc: 'Açı ve mesafe ölçümüne dayalı klasik hassas ölçüm cihazı.' },
+	{ icon: 'ruler', title: 'Dijital ve Optik Nivo', desc: 'Kot ve yükseklik farklarının hassas ölçümü.' },
+	{ icon: 'compass', title: 'Lazer Mesafe Ölçüm Cihazları', desc: 'Hızlı mesafe ve kontrol ölçümleri için saha ekipmanı.' },
+	{ icon: 'cpu', title: 'Saha Veri Toplama Ekipmanları', desc: 'Ölçüm verisinin dijital olarak kaydedilmesi ve aktarılması.' },
+];
+
+const advancedSolutions = [
+	{ icon: 'drone', title: 'Drone Destekli Ölçüm', desc: 'Geniş alanların hızlı ve kapsamlı veri üretimi.' },
+	{ icon: 'layers', title: 'Fotogrametri', desc: 'Hava fotoğraflarından ölçülebilir veri üretimi.' },
+	{ icon: 'database', title: 'Ortofoto', desc: 'Coğrafi olarak düzeltilmiş, ölçülebilir görüntü haritaları.' },
+	{ icon: 'building', title: '3B Modelleme', desc: 'Arazi ve yapıların üç boyutlu sayısal modellenmesi.' },
+	{ icon: 'clock', title: 'Deformasyon İzleme', desc: 'Zaman içindeki hareketlerin periyodik ölçümlerle takibi.' },
+];
+
+const software = ['Netcad', 'AutoCAD', 'Civil 3D', 'ArcGIS', 'QGIS', 'Pix4D', 'Agisoft Metashape'];
+
+const qualitySteps = [
+	{ title: 'Saha Verisinin Kontrolü', desc: 'Ölçüm sonuçları saha içinde çapraz kontrol edilir.' },
+	{ title: 'Koordinat Tutarlılığı', desc: 'Referans sistemi ve koordinat doğruluğu teyit edilir.' },
+	{ title: 'Veri Dönüşümü', desc: 'Ham veri, ilgili CAD/GIS formatına dönüştürülür.' },
+	{ title: 'Çizim Kontrolü', desc: 'Teknik çizimler proje gereklilikleriyle karşılaştırılır.' },
+	{ title: 'Teslim Formatı', desc: 'Çıktılar talep edilen formatta hazırlanır.' },
+	{ title: 'Arşivleme', desc: 'Proje verileri ileride erişilebilir şekilde arşivlenir.' },
+];
+---
+
+<Layout
+	title="Teknoloji ve Ölçüm Altyapısı | DüzlemSa Harita"
+	description="GNSS, Total Station, nivo, CAD, GIS ve proje bazlı ölçüm teknolojilerinin harita mühendisliği çalışmalarında nasıl kullanıldığını inceleyin."
+>
+	<main id="main-content">
+		<div class="container">
+			<Breadcrumb items={[{ label: 'Ana Sayfa', href: '/' }, { label: 'Teknoloji' }]} />
+		</div>
+
+		<section class="tek-hero">
+			<div class="container tek-hero__inner">
+				<p class="eyebrow">Teknoloji</p>
+				<h1>Ölçümden veriye, veriden uygulanabilir sonuca</h1>
+				<p class="tek-hero__desc">
+					Projenin ihtiyacına ve saha koşullarına göre uygun ölçüm yöntemi ve teknik altyapı
+					belirlenir.
+				</p>
+			</div>
+		</section>
+
+		<section class="tek-section">
+			<div class="container">
+				<h2>Saha ölçüm sistemleri</h2>
+				<div class="tek-grid">
+					{
+						fieldSystems.map((item) => (
+							<div class="tek-card">
+								<Icon name={item.icon} class="tek-card__icon" />
+								<h3>{item.title}</h3>
+								<p>{item.desc}</p>
+							</div>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="tek-section section--alt">
+			<div class="container">
+				<h2>İleri ölçüm çözümleri</h2>
+				<p class="section-desc" style="margin-bottom:2rem;">
+					Projenin ihtiyacına ve saha koşullarına göre uygun ölçüm yöntemi ve teknik altyapı
+					belirlenir.
+				</p>
+				<div class="tek-grid">
+					{
+						advancedSolutions.map((item) => (
+							<div class="tek-card">
+								<Icon name={item.icon} class="tek-card__icon" />
+								<h3>{item.title}</h3>
+								<p>{item.desc}</p>
+							</div>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="tek-section">
+			<div class="container">
+				<h2>Yazılım ve veri işleme</h2>
+				<div class="tek-software">
+					{software.map((s) => <span>{s}</span>)}
+					<span class="tek-software__generic">CAD / GIS Veri İşleme Çözümleri</span>
+				</div>
+				<p class="tek-software__note">
+					Yukarıdaki yazılımlar, sektörde yaygın kullanılan CAD/GIS araçlarını temsil eder;
+					belirli bir projede kullanılacak yazılım, projenin kapsamına göre belirlenir.
+				</p>
+			</div>
+		</section>
+
+		<section class="tek-section section--alt">
+			<div class="container">
+				<h2>Kalite kontrol süreci</h2>
+				<ol class="quality-list">
+					{
+						qualitySteps.map((step, i) => (
+							<li>
+								<span class="quality-list__num">{String(i + 1).padStart(2, '0')}</span>
+								<div>
+									<h3>{step.title}</h3>
+									<p>{step.desc}</p>
+								</div>
+							</li>
+						))
+					}
+				</ol>
+			</div>
+		</section>
+
+		<section class="tek-cta bg-grid-dark">
+			<div class="container tek-cta__inner">
+				<h2>Projeniz için uygun ölçüm yöntemini birlikte belirleyelim</h2>
+				<div class="tek-cta__actions">
+					<a href="/teklif-al" class="btn btn-primary">Teklif Al</a>
+					<a href={company.contact.whatsappUriWithMessage} target="_blank" rel="noopener" class="btn btn-outline-light">
+						WhatsApp
+					</a>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.tek-hero {
+		padding-block: clamp(2.5rem, 6vw, 4rem);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.tek-hero__inner {
+		max-width: 680px;
+	}
+
+	.tek-hero__desc {
+		margin-top: 1.25rem;
+		font-size: 1.05rem;
+		line-height: 1.7;
+		color: var(--text-body);
+	}
+
+	.tek-section {
+		padding-block: var(--section-padding-y);
+	}
+
+	.tek-section h2 {
+		margin-bottom: 1.75rem;
+	}
+
+	.tek-grid {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: 1.25rem;
+	}
+
+	.tek-card {
+		padding: 1.5rem 1.25rem;
+		background: var(--bg-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		text-align: center;
+	}
+
+	.tek-card :global(.tek-card__icon) {
+		width: 30px;
+		height: 30px;
+		color: var(--color-primary);
+		margin-inline: auto;
+		margin-bottom: 1rem;
+	}
+
+	.tek-card h3 {
+		font-size: 0.92rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.tek-card p {
+		font-size: 0.8rem;
+		color: var(--text-body);
+		line-height: 1.5;
+	}
+
+	.tek-software {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.tek-software span {
+		padding: 0.6rem 1.25rem;
+		background: var(--color-charcoal);
+		color: var(--color-warm-white);
+		border-radius: 999px;
+		font-size: 0.9rem;
+		font-weight: 600;
+	}
+
+	.tek-software__generic {
+		background: transparent !important;
+		color: var(--text-heading) !important;
+		border: 1px dashed var(--color-soft-gray);
+	}
+
+	.tek-software__note {
+		font-size: 0.88rem;
+		color: var(--text-body);
+		line-height: 1.6;
+		max-width: 70ch;
+	}
+
+	.quality-list {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.5rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.quality-list li {
+		display: flex;
+		gap: 1rem;
+		padding: 1.5rem;
+		background: var(--bg-page);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+	}
+
+	.quality-list__num {
+		font-size: 1.3rem;
+		font-weight: 800;
+		color: var(--color-soft-gray);
+		flex-shrink: 0;
+	}
+
+	.quality-list h3 {
+		font-size: 0.95rem;
+		margin-bottom: 0.4rem;
+	}
+
+	.quality-list p {
+		font-size: 0.85rem;
+		color: var(--text-body);
+		line-height: 1.55;
+	}
+
+	.tek-cta {
+		background: var(--color-charcoal);
+		color: var(--color-warm-white);
+		padding-block: var(--section-padding-y);
+		text-align: center;
+	}
+
+	.tek-cta h2 {
+		color: var(--color-warm-white);
+		max-width: 640px;
+		margin-inline: auto;
+	}
+
+	.tek-cta__actions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1rem;
+		margin-top: 2rem;
+	}
+
+	@media (max-width: 900px) {
+		.tek-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.quality-list {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.tek-grid,
+		.quality-list {
+			grid-template-columns: 1fr;
+		}
+
+		.tek-cta__actions .btn {
+			width: 100%;
+		}
+	}
+</style>

@@ -1,4 +1,5 @@
 ---
+import { company } from '../data/company';
 ---
 
 <section class="hero bg-grid-dark">
@@ -22,8 +23,8 @@
 			süreçlerinden teknik harita üretimine kadar güvenilir mühendislik hizmetleri sunar.
 		</p>
 		<div class="hero__actions">
-			<a href="#iletisim" class="btn btn-primary">Teklif Al</a>
-			<a href="https://wa.me/905388751998" target="_blank" rel="noopener" class="btn btn-outline-light">
+			<a href="/teklif-al" class="btn btn-primary">Teklif Al</a>
+			<a href={company.contact.whatsappUriWithMessage} target="_blank" rel="noopener" class="btn btn-outline-light">
 				WhatsApp'tan Bilgi Al
 			</a>
 		</div>
@@ -35,11 +36,11 @@
 			</div>
 			<div>
 				<dt>Merkez</dt>
-				<dd>Şehitkamil / Gaziantep</dd>
+				<dd>{company.center}</dd>
 			</div>
 			<div>
 				<dt>Deneyim</dt>
-				<dd>4 Yıl</dd>
+				<dd>{company.experience}</dd>
 			</div>
 		</dl>
 	</div>

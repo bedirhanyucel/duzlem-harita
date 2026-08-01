@@ -1,0 +1,132 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import FAQList from '../components/FAQList.astro';
+import { faqCategories, faqItems } from '../data/faq';
+import { faqPageSchema } from '../lib/schema';
+
+const allFlat = faqItems.map(({ q, a }) => ({ q, a }));
+---
+
+<Layout
+	title="Sıkça Sorulan Sorular | DüzlemSa Harita"
+	description="Parsel, kadastro, imar, şantiye ölçümleri ve teklif süreciyle ilgili sıkça sorulan sorular ve yanıtları."
+	structuredData={faqPageSchema(allFlat)}
+>
+	<main id="main-content">
+		<div class="container">
+			<Breadcrumb items={[{ label: 'Ana Sayfa', href: '/' }, { label: 'SSS' }]} />
+		</div>
+
+		<section class="sss-hero">
+			<div class="container">
+				<p class="eyebrow">SSS</p>
+				<h1>Sıkça sorulan sorular</h1>
+				<p class="sss-hero__desc">
+					Parsel ve kadastro, imar, şantiye ölçümleri ile teklif sürecine dair en çok sorulan
+					soruları aşağıda kategorilere göre bulabilirsiniz.
+				</p>
+			</div>
+		</section>
+
+		<section class="sss-section">
+			<div class="container sss-categories">
+				{
+					faqCategories.map((cat) => {
+						const items = faqItems.filter((f) => f.category === cat.id);
+						if (items.length === 0) return null;
+						return (
+							<div class="sss-category" id={cat.id}>
+								<h2>{cat.title}</h2>
+								<FAQList items={items} />
+							</div>
+						);
+					})
+				}
+			</div>
+		</section>
+
+		<section class="sss-cta">
+			<div class="container sss-cta__box">
+				<h2>Aradığınız cevabı bulamadınız mı?</h2>
+				<p>Sorunuzu doğrudan iletin; teknik kapsamı birlikte değerlendirelim.</p>
+				<div class="sss-cta__actions">
+					<a href="/teklif-al" class="btn btn-primary">Teklif Al</a>
+					<a href="/iletisim" class="btn btn-outline">İletişime Geç</a>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.sss-hero {
+		padding-block: clamp(2.5rem, 6vw, 4rem);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.sss-hero h1 {
+		max-width: 42ch;
+	}
+
+	.sss-hero__desc {
+		margin-top: 1.25rem;
+		font-size: 1.05rem;
+		line-height: 1.7;
+		color: var(--text-body);
+		max-width: 65ch;
+	}
+
+	.sss-section {
+		padding-block: var(--section-padding-y);
+	}
+
+	.sss-categories {
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
+		max-width: 800px;
+	}
+
+	.sss-category {
+		scroll-margin-top: 100px;
+	}
+
+	.sss-category h2 {
+		margin-bottom: 1.25rem;
+		font-size: 1.3rem;
+	}
+
+	.sss-cta {
+		padding-bottom: var(--section-padding-y);
+	}
+
+	.sss-cta__box {
+		text-align: center;
+		max-width: 640px;
+		margin-inline: auto;
+		padding: clamp(2rem, 5vw, 3rem);
+		background: var(--bg-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+
+	.sss-cta__box p {
+		margin-top: 0.75rem;
+		color: var(--text-body);
+	}
+
+	.sss-cta__actions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1rem;
+		margin-top: 1.75rem;
+	}
+
+	@media (max-width: 560px) {
+		.sss-cta__actions .btn {
+			width: 100%;
+		}
+	}
+</style>

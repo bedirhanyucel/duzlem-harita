@@ -1,0 +1,95 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import ContactForm from '../components/ContactForm.astro';
+---
+
+<Layout
+	title="Teklif Al | DüzlemSa Harita Gaziantep"
+	description="DüzlemSa Harita'dan projeniz için teklif ve teknik bilgi talep edin. Formu doldurun veya telefon / WhatsApp ile ulaşın."
+>
+	<main id="main-content">
+		<div class="container">
+			<Breadcrumb items={[{ label: 'Ana Sayfa', href: '/' }, { label: 'Teklif Al' }]} />
+		</div>
+
+		<section class="teklif-hero">
+			<div class="container">
+				<p class="eyebrow">Teklif Al</p>
+				<h1>Projenizi anlatın, teknik kapsamı birlikte değerlendirelim</h1>
+				<p class="teklif-hero__desc">
+					Aşağıdaki formu doldurun; ihtiyacınıza uygun teknik yaklaşımı ve kapsamı size geri
+					dönüş yaparak birlikte netleştirelim.
+				</p>
+			</div>
+		</section>
+
+		<section class="teklif-section">
+			<div class="container">
+				<p id="teklif-redirect-banner" class="teklif-banner" hidden></p>
+				<ContactForm />
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<script>
+	const params = new URLSearchParams(location.search);
+	const submitted = params.get('submitted');
+	if (submitted !== null) {
+		const banner = document.getElementById('teklif-redirect-banner');
+		if (banner) {
+			banner.hidden = false;
+			banner.textContent =
+				submitted === '1'
+					? 'Talebiniz alındı. En kısa sürede size dönüş yapacağız.'
+					: 'Talebiniz gönderilemedi. Lütfen telefon veya WhatsApp üzerinden bize ulaşın.';
+			banner.classList.add(submitted === '1' ? 'teklif-banner--success' : 'teklif-banner--error');
+		}
+		history.replaceState(null, '', location.pathname);
+	}
+</script>
+
+<style>
+	.teklif-hero {
+		padding-block: clamp(2.5rem, 6vw, 4rem);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.teklif-hero h1 {
+		max-width: 42ch;
+	}
+
+	.teklif-hero__desc {
+		margin-top: 1.25rem;
+		font-size: 1.05rem;
+		line-height: 1.7;
+		color: var(--text-body);
+		max-width: 60ch;
+	}
+
+	.teklif-section {
+		padding-block: var(--section-padding-y);
+	}
+
+	.teklif-banner {
+		max-width: 720px;
+		margin-bottom: 1.5rem;
+		padding: 1rem 1.25rem;
+		border-radius: var(--radius-md);
+		font-size: 0.92rem;
+		font-weight: 600;
+	}
+
+	.teklif-banner--success {
+		background: rgba(159, 179, 106, 0.15);
+		color: #4a6b2a;
+		border: 1px solid rgba(159, 179, 106, 0.4);
+	}
+
+	.teklif-banner--error {
+		background: rgba(142, 31, 45, 0.08);
+		color: var(--color-primary);
+		border: 1px solid rgba(142, 31, 45, 0.3);
+	}
+</style>

@@ -1,0 +1,569 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Icon from '../components/Icon.astro';
+import { company } from '../data/company';
+import { aboutPageSchema } from '../lib/schema';
+
+const approach = [
+	{ title: 'İhtiyacı Doğru Anlamak', desc: 'Projenin amacı, arazi koşulları ve beklenen sonuç birlikte değerlendirilir.' },
+	{ title: 'Uygun Teknik Yöntemi Belirlemek', desc: 'Ölçüm yöntemi ve ekipman, proje kapsamına göre seçilir.' },
+	{ title: 'Saha ve Ofis Verisini Birlikte Kontrol Etmek', desc: 'Ölçüm sonuçları ofis çalışmasıyla karşılıklı doğrulanır.' },
+	{ title: 'Süreci Açık Biçimde Yönetmek', desc: 'Kapsam ve ilerleme hakkında düzenli bilgilendirme yapılır.' },
+	{ title: 'Kullanılabilir Sonuç Üretmek', desc: 'Teslim edilen çıktı bir sonraki proje adımında doğrudan kullanılabilir.' },
+];
+
+const processSteps = [
+	{ title: 'İlk Değerlendirme', desc: 'Talep ve mevcut belgeler incelenir.' },
+	{ title: 'Teknik Kapsam', desc: 'Yöntem, ekipman ve zaman planı netleştirilir.' },
+	{ title: 'Saha ve Ofis Çalışması', desc: 'Ölçüm ve veri işleme kontrollü şekilde yürütülür.' },
+	{ title: 'Teslim ve Bilgilendirme', desc: 'Sonuçlar kullanılabilir formatta paylaşılır.' },
+	{ title: 'Gerektiğinde Devam Desteği', desc: 'Proje ilerledikçe ek teknik destek sağlanabilir.' },
+];
+---
+
+<Layout
+	title="Kurumsal | DüzlemSa Harita Gaziantep"
+	description="DüzlemSa Harita'nın mühendislik yaklaşımını, çalışma ilkelerini, kurucusunu ve mimari-hukuki çözüm ortaklarıyla yürüttüğü disiplinler arası proje yapısını inceleyin."
+	structuredData={aboutPageSchema()}
+>
+	<main id="main-content">
+		<div class="container">
+			<Breadcrumb items={[{ label: 'Ana Sayfa', href: '/' }, { label: 'Kurumsal' }]} />
+		</div>
+
+		<section class="corp-hero">
+			<div class="container corp-hero__inner">
+				<div class="corp-hero__text">
+					<p class="eyebrow">DüzlemSa Harita</p>
+					<h1>Teknik doğruluğu, açık iletişimle birleştiren mühendislik yaklaşımı</h1>
+					<p class="corp-hero__desc">
+						DüzlemSa Harita; arazi ölçümlerinden imar uygulamalarına, şantiye süreçlerinden
+						mekânsal veri üretimine kadar her projeyi teknik gereklilikleri ve kullanım amacını
+						birlikte değerlendirerek ele alır.
+					</p>
+					<p class="corp-hero__tag">
+						{company.center} · {company.experience} deneyim · Bölgesel proje desteği
+					</p>
+					<div class="corp-hero__actions">
+						<a href="/hizmetler" class="btn btn-primary">Hizmetleri İnceleyin</a>
+						<a href="/teklif-al" class="btn btn-outline">Projenizi Anlatın</a>
+					</div>
+				</div>
+				<div class="corp-hero__visual" aria-hidden="true">
+					<svg viewBox="0 0 300 300">
+						<line x1="40" y1="20" x2="40" y2="280" />
+						<line x1="20" y1="240" x2="280" y2="240" />
+						<polygon points="90,200 150,90 220,120 240,210 140,240" />
+						<circle cx="90" cy="200" r="4" />
+						<circle cx="150" cy="90" r="4" />
+						<circle cx="220" cy="120" r="4" />
+						<circle cx="240" cy="210" r="4" />
+						<circle cx="140" cy="240" r="4" />
+					</svg>
+				</div>
+			</div>
+		</section>
+
+		<section class="corp-section">
+			<div class="container corp-section__narrow">
+				<h2>Araziden uygulamaya uzanan bütüncül bir çalışma yapısı</h2>
+				<div class="corp-prose">
+					<p>
+						DüzlemSa Harita, Gaziantep merkezli bir harita mühendisliği ofisidir. Parsel,
+						kadastro, imar, inşaat, altyapı ve teknik harita üretimi süreçlerinde proje özelinde
+						çözümler geliştirir.
+					</p>
+					<p>
+						Her çalışma yalnızca saha ölçümü olarak değerlendirilmez. Mevcut belgeler, projenin
+						amacı, arazi koşulları, teknik gereklilikler ve teslim edilecek çıktı birlikte ele
+						alınır.
+					</p>
+					<p>
+						Gerektiğinde mimari çözüm ortakları ve hukuki danışmanlık ağıyla koordinasyon
+						sağlanarak farklı disiplinlerin daha düzenli ilerlemesi hedeflenir.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="corp-section section--alt">
+			<div class="container">
+				<h2>Çalışma yaklaşımı</h2>
+				<ol class="approach-list">
+					{
+						approach.map((item, i) => (
+							<li>
+								<span class="approach-list__num">{String(i + 1).padStart(2, '0')}</span>
+								<div>
+									<h3>{item.title}</h3>
+									<p>{item.desc}</p>
+								</div>
+							</li>
+						))
+					}
+				</ol>
+			</div>
+		</section>
+
+		<section class="corp-section">
+			<div class="container">
+				<h2>Kurucu</h2>
+				<div class="founder-card">
+					<div class="founder-card__mark" aria-hidden="true">
+						<span>{company.founder.monogram}</span>
+						<svg viewBox="0 0 120 120">
+							<circle cx="60" cy="60" r="52" />
+							<path d="M60 8v20M60 92v20M8 60h20M92 60h20" />
+						</svg>
+					</div>
+					<div class="founder-card__body">
+						<p class="founder-card__name">{company.founder.name}</p>
+						<p class="founder-card__role">{company.founder.role}</p>
+						<p class="founder-card__message">“{company.founder.message}”</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="corp-section section--alt">
+			<div class="container">
+				<h2>Disiplinler arası çözüm ağı</h2>
+				<p class="section-desc" style="margin-bottom:2rem">
+					DüzlemSa Harita, proje bazlı koordinasyonla farklı uzmanlık alanlarını bir araya
+					getiren entegre bir çalışma yapısı sunar.
+				</p>
+				<div class="network-grid">
+					{
+						company.solutionNetwork.map((item) => (
+							<div class="network-grid__item">
+								<Icon name="network" class="icon-sm-standalone" />
+								<span>{item.label}</span>
+							</div>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="corp-section">
+			<div class="container">
+				<h2>Çalışma süreci</h2>
+				<ol class="process-strip">
+					{
+						processSteps.map((step, i) => (
+							<li>
+								<span class="process-strip__num">{i + 1}</span>
+								<h3>{step.title}</h3>
+								<p>{step.desc}</p>
+							</li>
+						))
+					}
+				</ol>
+			</div>
+		</section>
+
+		<section class="corp-section section--alt">
+			<div class="container">
+				<h2>Temel değerler</h2>
+				<div class="values-grid">
+					{
+						company.coreValues.map((v) => (
+							<div class="values-grid__item">
+								<Icon name="check-circle" class="icon-sm-standalone" />
+								<div>
+									<h3>{v.title}</h3>
+									<p>{v.desc}</p>
+								</div>
+							</div>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="corp-section">
+			<div class="container corp-section__narrow">
+				<h2>Gaziantep merkezli, proje kapsamına göre bölgesel hizmet</h2>
+				<p class="corp-region-text">
+					DüzlemSa Harita, Şehitkamil'deki ofisinden Gaziantep genelinde hizmet sunar. Projenin
+					niteliği, saha konumu ve çalışma kapsamına göre çevre illerdeki talepler de
+					değerlendirilir.
+				</p>
+			</div>
+		</section>
+
+		<section class="corp-cta bg-grid-dark">
+			<div class="container corp-cta__inner">
+				<h2>Projenizi teknik açıdan birlikte değerlendirelim</h2>
+				<div class="corp-cta__actions">
+					<a href="/hizmetler" class="btn btn-primary">Hizmetleri İnceleyin</a>
+					<a href="/teklif-al" class="btn btn-outline-light">Teklif Al</a>
+					<a href={company.contact.whatsappUriWithMessage} target="_blank" rel="noopener" class="btn btn-outline-light">
+						WhatsApp'tan Yaz
+					</a>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.corp-hero {
+		padding-block: clamp(2.5rem, 6vw, 4rem);
+		border-bottom: 1px solid var(--color-border);
+		background: var(--bg-page);
+	}
+
+	.corp-hero__inner {
+		display: grid;
+		grid-template-columns: 1.2fr 0.8fr;
+		gap: 3rem;
+		align-items: center;
+	}
+
+	.corp-hero__desc {
+		margin-top: 1.25rem;
+		font-size: 1.05rem;
+		line-height: 1.7;
+		color: var(--text-body);
+		max-width: 60ch;
+	}
+
+	.corp-hero__tag {
+		margin-top: 1.25rem;
+		font-size: 0.85rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		color: var(--color-primary);
+	}
+
+	.corp-hero__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-top: 1.75rem;
+	}
+
+	.corp-hero__visual {
+		aspect-ratio: 1;
+		max-width: 280px;
+		margin-inline: auto;
+		width: 100%;
+	}
+
+	.corp-hero__visual svg {
+		width: 100%;
+		height: 100%;
+	}
+
+	.corp-hero__visual line {
+		stroke: var(--color-soft-gray);
+		stroke-width: 1.5;
+	}
+
+	.corp-hero__visual polygon {
+		fill: rgba(142, 31, 45, 0.1);
+		stroke: var(--color-primary);
+		stroke-width: 1.5;
+	}
+
+	.corp-hero__visual circle {
+		fill: var(--color-accent-olive);
+	}
+
+	.corp-section {
+		padding-block: var(--section-padding-y);
+	}
+
+	.corp-section h2 {
+		margin-bottom: 1.5rem;
+	}
+
+	.corp-section__narrow {
+		max-width: 72ch;
+	}
+
+	.corp-prose {
+		display: flex;
+		flex-direction: column;
+		gap: 1.1rem;
+		font-size: 1.02rem;
+		line-height: 1.8;
+		color: var(--text-body);
+	}
+
+	.approach-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		max-width: 800px;
+	}
+
+	.approach-list li {
+		display: flex;
+		gap: 1.5rem;
+		padding-block: 1.5rem;
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.approach-list li:first-child {
+		padding-top: 0;
+	}
+
+	.approach-list li:last-child {
+		border-bottom: none;
+	}
+
+	.approach-list__num {
+		font-size: 1.5rem;
+		font-weight: 800;
+		color: var(--color-soft-gray);
+		flex-shrink: 0;
+		width: 2.5rem;
+	}
+
+	.approach-list h3 {
+		font-size: 1.02rem;
+		margin-bottom: 0.4rem;
+	}
+
+	.approach-list p {
+		font-size: 0.92rem;
+		color: var(--text-body);
+		line-height: 1.6;
+	}
+
+	.founder-card {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 2.5rem;
+		align-items: center;
+		max-width: 900px;
+		padding: clamp(2rem, 4vw, 3rem);
+		background: var(--color-charcoal);
+		border-radius: var(--radius-lg);
+	}
+
+	.founder-card__mark {
+		position: relative;
+		width: 120px;
+		height: 120px;
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.founder-card__mark span {
+		position: relative;
+		z-index: 1;
+		font-size: 1.6rem;
+		font-weight: 800;
+		letter-spacing: 0.04em;
+		color: var(--color-warm-white);
+	}
+
+	.founder-card__mark svg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.founder-card__mark circle {
+		fill: none;
+		stroke: var(--color-primary);
+		stroke-width: 2;
+	}
+
+	.founder-card__mark path {
+		stroke: rgba(246, 243, 238, 0.3);
+		stroke-width: 2;
+	}
+
+	.founder-card__name {
+		font-size: 1.15rem;
+		font-weight: 700;
+		color: var(--color-warm-white);
+	}
+
+	.founder-card__role {
+		margin-top: 0.25rem;
+		font-size: 0.85rem;
+		color: var(--color-accent-olive);
+		font-weight: 600;
+	}
+
+	.founder-card__message {
+		margin-top: 1.1rem;
+		font-size: 1rem;
+		line-height: 1.7;
+		color: rgba(246, 243, 238, 0.8);
+		font-style: italic;
+		max-width: 60ch;
+	}
+
+	.network-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1.25rem;
+	}
+
+	.network-grid__item {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.75rem;
+		padding: 1.5rem;
+		background: var(--bg-page);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		font-weight: 700;
+		font-size: 0.95rem;
+	}
+
+	:global(.icon-sm-standalone) {
+		width: 24px;
+		height: 24px;
+		color: var(--color-primary);
+	}
+
+	.process-strip {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: 1.25rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.process-strip li {
+		padding: 1.5rem 1.25rem 1.25rem;
+		background: var(--bg-surface);
+		border: 1px solid var(--color-border);
+		border-top: 3px solid var(--color-primary);
+		border-radius: var(--radius-md);
+	}
+
+	.process-strip__num {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		border-radius: 50%;
+		background: var(--color-primary);
+		color: var(--color-warm-white);
+		font-weight: 700;
+		font-size: 0.85rem;
+		margin-bottom: 0.9rem;
+	}
+
+	.process-strip h3 {
+		font-size: 0.92rem;
+		margin-bottom: 0.4rem;
+	}
+
+	.process-strip p {
+		font-size: 0.82rem;
+		color: var(--text-body);
+		line-height: 1.5;
+	}
+
+	.values-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.5rem;
+	}
+
+	.values-grid__item {
+		display: flex;
+		gap: 0.9rem;
+		align-items: flex-start;
+	}
+
+	.values-grid h3 {
+		font-size: 0.98rem;
+		margin-bottom: 0.35rem;
+	}
+
+	.values-grid p {
+		font-size: 0.88rem;
+		color: var(--text-body);
+		line-height: 1.55;
+	}
+
+	.corp-region-text {
+		margin-top: 0.5rem;
+		font-size: 1.02rem;
+		line-height: 1.75;
+		color: var(--text-body);
+	}
+
+	.corp-cta {
+		background: var(--color-charcoal);
+		color: var(--color-warm-white);
+		padding-block: var(--section-padding-y);
+		text-align: center;
+	}
+
+	.corp-cta h2 {
+		color: var(--color-warm-white);
+		max-width: 640px;
+		margin-inline: auto;
+	}
+
+	.corp-cta__actions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1rem;
+		margin-top: 2rem;
+	}
+
+	@media (max-width: 900px) {
+		.corp-hero__inner {
+			grid-template-columns: 1fr;
+		}
+
+		.corp-hero__visual {
+			max-width: 180px;
+			order: -1;
+		}
+
+		.network-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.process-strip {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.values-grid {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.founder-card {
+			grid-template-columns: 1fr;
+			text-align: center;
+			justify-items: center;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.network-grid,
+		.values-grid,
+		.process-strip {
+			grid-template-columns: 1fr;
+		}
+
+		.corp-hero__actions .btn,
+		.corp-cta__actions .btn {
+			width: 100%;
+		}
+	}
+</style>

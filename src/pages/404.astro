@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { company } from '../data/company';
+---
+
+<Layout title="Sayfa Bulunamadı | DüzlemSa Harita" description="Aradığınız sayfa bulunamadı." noindex>
+	<main id="main-content">
+		<section class="notfound bg-grid-dark">
+			<div class="container notfound__inner">
+				<span class="notfound__code" aria-hidden="true">404</span>
+				<h1>Aradığınız koordinata ulaşamadık</h1>
+				<p>Sayfa taşınmış, kaldırılmış veya adres hatalı yazılmış olabilir.</p>
+				<div class="notfound__actions">
+					<a href="/" class="btn btn-primary">Ana Sayfaya Dön</a>
+					<a href="/hizmetler" class="btn btn-outline-light">Hizmetleri İncele</a>
+					<a href="/iletisim" class="btn btn-outline-light">İletişime Geç</a>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.notfound {
+		min-height: 70vh;
+		display: flex;
+		align-items: center;
+		background: var(--color-charcoal);
+		color: var(--color-warm-white);
+		padding-block: clamp(3rem, 8vw, 6rem);
+	}
+
+	.notfound__inner {
+		max-width: 640px;
+		text-align: center;
+		margin-inline: auto;
+	}
+
+	.notfound__code {
+		display: block;
+		font-size: clamp(3.5rem, 10vw, 6rem);
+		font-weight: 800;
+		color: var(--color-primary);
+		line-height: 1;
+		margin-bottom: 1rem;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.notfound h1 {
+		color: var(--color-warm-white);
+	}
+
+	.notfound p {
+		margin-top: 1.1rem;
+		font-size: 1.05rem;
+		color: rgba(246, 243, 238, 0.75);
+	}
+
+	.notfound__actions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1rem;
+		margin-top: 2.25rem;
+	}
+
+	@media (max-width: 560px) {
+		.notfound__actions .btn {
+			width: 100%;
+		}
+	}
+</style>

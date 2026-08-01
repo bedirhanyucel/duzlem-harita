@@ -1,15 +1,9 @@
 ---
 import logo from '../assets/logo.png';
+import { company } from '../data/company';
 
-const navItems = [
-	{ label: 'Ana Sayfa', href: '/' },
-	{ label: 'Hizmetler', href: '/hizmetler' },
-	{ label: 'Projeler', href: '/#projeler' },
-	{ label: 'Kurumsal', href: '/#kurumsal' },
-	{ label: 'Teknoloji', href: '/#teknoloji' },
-	{ label: 'SSS', href: '/#sss' },
-	{ label: 'İletişim', href: '/#iletisim' },
-];
+const currentPath = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? currentPath === '/' : currentPath.startsWith(href));
 ---
 
 <header class="site-header">
@@ -21,9 +15,11 @@ const navItems = [
 		<nav class="nav" aria-label="Ana menü">
 			<ul class="nav__list">
 				{
-					navItems.map((item) => (
+					company.nav.map((item) => (
 						<li>
-							<a href={item.href}>{item.label}</a>
+							<a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+								{item.label}
+							</a>
 						</li>
 					))
 				}
@@ -31,30 +27,109 @@ const navItems = [
 		</nav>
 
 		<div class="site-header__actions">
-			<a href="/#iletisim" class="btn btn-primary">Teklif Al</a>
+			<a href="/teklif-al" class="btn btn-primary">Teklif Al</a>
 		</div>
 
-		<input type="checkbox" id="menu-toggle" class="menu-toggle-input" aria-hidden="true" />
-		<label for="menu-toggle" class="menu-toggle" aria-label="Menüyü aç veya kapat">
+		<button
+			type="button"
+			id="menu-toggle-btn"
+			class="menu-toggle"
+			aria-expanded="false"
+			aria-controls="mobile-nav"
+			aria-label="Menüyü aç"
+		>
 			<span></span>
 			<span></span>
 			<span></span>
-		</label>
+		</button>
 
-		<nav class="mobile-nav" aria-label="Mobil menü">
+		<nav class="mobile-nav" id="mobile-nav" aria-label="Mobil menü">
 			<ul>
 				{
-					navItems.map((item) => (
+					company.nav.map((item) => (
 						<li>
-							<a href={item.href}>{item.label}</a>
+							<a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+								{item.label}
+							</a>
 						</li>
 					))
 				}
-				<li><a href="/#iletisim" class="btn btn-primary mobile-nav__cta">Teklif Al</a></li>
+				<li><a href="/teklif-al" class="btn btn-primary mobile-nav__cta">Teklif Al</a></li>
 			</ul>
 		</nav>
 	</div>
 </header>
+
+<script>
+	const btn = document.getElementById('menu-toggle-btn') as HTMLButtonElement | null;
+	const nav = document.getElementById('mobile-nav') as HTMLElement | null;
+
+	if (btn && nav) {
+		let lastFocused: HTMLElement | null = null;
+
+		const focusableSelector =
+			'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+		const open = () => {
+			nav.classList.add('is-open');
+			btn.classList.add('is-open');
+			btn.setAttribute('aria-expanded', 'true');
+			btn.setAttribute('aria-label', 'Menüyü kapat');
+			document.body.style.overflow = 'hidden';
+			lastFocused = document.activeElement as HTMLElement;
+			const firstLink = nav.querySelector<HTMLElement>(focusableSelector);
+			firstLink?.focus();
+			document.addEventListener('keydown', onKeydown);
+			document.addEventListener('click', onOutsideClick, true);
+		};
+
+		const close = ({ returnFocus = true } = {}) => {
+			nav.classList.remove('is-open');
+			btn.classList.remove('is-open');
+			btn.setAttribute('aria-expanded', 'false');
+			btn.setAttribute('aria-label', 'Menüyü aç');
+			document.body.style.overflow = '';
+			document.removeEventListener('keydown', onKeydown);
+			document.removeEventListener('click', onOutsideClick, true);
+			if (returnFocus) (lastFocused ?? btn).focus();
+		};
+
+		const onKeydown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				close();
+				return;
+			}
+			if (e.key === 'Tab') {
+				const focusables = Array.from(nav.querySelectorAll<HTMLElement>(focusableSelector));
+				if (focusables.length === 0) return;
+				const first = focusables[0];
+				const last = focusables[focusables.length - 1];
+				if (e.shiftKey && document.activeElement === first) {
+					e.preventDefault();
+					last.focus();
+				} else if (!e.shiftKey && document.activeElement === last) {
+					e.preventDefault();
+					first.focus();
+				}
+			}
+		};
+
+		const onOutsideClick = (e: MouseEvent) => {
+			if (!nav.contains(e.target as Node) && !btn.contains(e.target as Node)) {
+				close({ returnFocus: false });
+			}
+		};
+
+		btn.addEventListener('click', () => {
+			if (nav.classList.contains('is-open')) close();
+			else open();
+		});
+
+		nav.querySelectorAll('a').forEach((link) => {
+			link.addEventListener('click', () => close({ returnFocus: false }));
+		});
+	}
+</script>
 
 <style>
 	.site-header {
@@ -110,7 +185,8 @@ const navItems = [
 		padding-block: 0.35rem;
 	}
 
-	.nav__list a:hover {
+	.nav__list a:hover,
+	.nav__list a[aria-current='page'] {
 		color: var(--color-primary);
 	}
 
@@ -118,31 +194,52 @@ const navItems = [
 		flex-shrink: 0;
 	}
 
-	.menu-toggle-input {
-		display: none;
-	}
-
 	.menu-toggle {
 		display: none;
 		flex-direction: column;
 		justify-content: center;
+		align-items: center;
 		gap: 5px;
 		width: 40px;
 		height: 40px;
 		cursor: pointer;
 		flex-shrink: 0;
+		background: none;
+		border: none;
+		padding: 0;
 	}
 
 	.menu-toggle span {
 		display: block;
 		height: 2px;
-		width: 100%;
+		width: 22px;
 		background: var(--color-charcoal);
 		transition: transform 0.2s ease, opacity 0.2s ease;
 	}
 
+	.menu-toggle:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 3px;
+	}
+
+	.menu-toggle.is-open span:nth-child(1) {
+		transform: translateY(7px) rotate(45deg);
+	}
+
+	.menu-toggle.is-open span:nth-child(2) {
+		opacity: 0;
+	}
+
+	.menu-toggle.is-open span:nth-child(3) {
+		transform: translateY(-7px) rotate(-45deg);
+	}
+
 	.mobile-nav {
 		display: none;
+	}
+
+	.mobile-nav a[aria-current='page'] {
+		color: var(--color-primary);
 	}
 
 	@media (max-width: 900px) {
@@ -151,22 +248,9 @@ const navItems = [
 			display: none;
 		}
 
-		.menu-toggle {
-			display: flex;
-		}
-
+		/* No-JS baseline: links are simply visible in normal flow. */
 		.mobile-nav {
 			display: block;
-			position: absolute;
-			top: 88px;
-			left: 0;
-			right: 0;
-			background: var(--color-warm-white);
-			border-bottom: 1px solid var(--color-border);
-			box-shadow: var(--shadow-md);
-			max-height: 0;
-			overflow: hidden;
-			transition: max-height 0.25s ease;
 		}
 
 		.mobile-nav ul {
@@ -191,20 +275,33 @@ const navItems = [
 			margin-top: 0.75rem;
 		}
 
-		.menu-toggle-input:checked ~ .mobile-nav {
+		/* JS-enhanced: collapse behind a real toggle button. */
+		:global(html.has-js) .menu-toggle {
+			display: flex;
+		}
+
+		:global(html.has-js) .mobile-nav {
+			position: absolute;
+			top: 88px;
+			left: 0;
+			right: 0;
+			background: var(--color-warm-white);
+			border-bottom: 1px solid var(--color-border);
+			box-shadow: var(--shadow-md);
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height 0.25s ease;
+		}
+
+		:global(html.has-js) .mobile-nav.is-open {
 			max-height: 600px;
 		}
+	}
 
-		.menu-toggle-input:checked ~ .menu-toggle span:nth-child(1) {
-			transform: translateY(7px) rotate(45deg);
-		}
-
-		.menu-toggle-input:checked ~ .menu-toggle span:nth-child(2) {
-			opacity: 0;
-		}
-
-		.menu-toggle-input:checked ~ .menu-toggle span:nth-child(3) {
-			transform: translateY(-7px) rotate(-45deg);
+	@media (prefers-reduced-motion: reduce) {
+		.menu-toggle span,
+		.mobile-nav {
+			transition: none;
 		}
 	}
 </style>

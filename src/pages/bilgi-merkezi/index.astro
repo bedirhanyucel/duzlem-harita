@@ -1,0 +1,156 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import TechnicalPlaceholder from '../../components/TechnicalPlaceholder.astro';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+
+const dateFormatter = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Layout
+	title="Bilgi Merkezi | DüzlemSa Harita"
+	description="Parsel, kadastro, imar ve şantiye ölçümleri hakkında güncel ve teknik olarak dengeli yazılar."
+>
+	<main id="main-content">
+		<div class="container">
+			<Breadcrumb items={[{ label: 'Ana Sayfa', href: '/' }, { label: 'Bilgi Merkezi' }]} />
+		</div>
+
+		<section class="bm-hero bg-grid-dark">
+			<div class="container bm-hero__inner">
+				<p class="eyebrow eyebrow--light">Bilgi Merkezi</p>
+				<h1>Harita mühendisliği süreçleri hakkında güncel yazılar</h1>
+				<p class="bm-hero__desc">
+					Plankoteden ifraz-tevhite, parsel sınır tespitinden inşaat öncesi ölçümlere kadar
+					sık sorulan konuları sade bir dille ele alıyoruz.
+				</p>
+			</div>
+		</section>
+
+		<section class="bm-section">
+			<div class="container bm-grid">
+				{
+					articles.map((article) => (
+						<a href={`/bilgi-merkezi/${article.id}`} class="bm-card">
+							<div class="bm-card__visual">
+								<TechnicalPlaceholder variant="contour" showBadge={false} />
+							</div>
+							<div class="bm-card__body">
+								<span class="bm-card__category">{article.data.category}</span>
+								<h2>{article.data.title}</h2>
+								<p>{article.data.description}</p>
+								<div class="bm-card__meta">
+									<time datetime={article.data.publishedAt.toISOString()}>
+										{dateFormatter.format(article.data.publishedAt)}
+									</time>
+									{article.data.readingTime && <span>· {article.data.readingTime}</span>}
+								</div>
+							</div>
+						</a>
+					))
+				}
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.bm-hero {
+		background: var(--color-charcoal);
+		color: var(--color-warm-white);
+		padding-block: clamp(3rem, 7vw, 5rem);
+	}
+
+	.bm-hero__inner {
+		max-width: 700px;
+	}
+
+	.eyebrow--light {
+		color: var(--color-accent-olive);
+	}
+
+	.eyebrow--light::before {
+		background: var(--color-accent-olive);
+	}
+
+	.bm-hero h1 {
+		color: var(--color-warm-white);
+	}
+
+	.bm-hero__desc {
+		margin-top: 1.25rem;
+		font-size: 1.05rem;
+		line-height: 1.7;
+		color: rgba(246, 243, 238, 0.8);
+	}
+
+	.bm-section {
+		padding-block: var(--section-padding-y);
+	}
+
+	.bm-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.75rem;
+	}
+
+	.bm-card {
+		display: block;
+		text-decoration: none;
+		background: var(--bg-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		transition: border-color 0.15s ease, box-shadow 0.15s ease;
+	}
+
+	.bm-card:hover {
+		border-color: var(--color-primary);
+		box-shadow: var(--shadow-md);
+	}
+
+	.bm-card__visual {
+		aspect-ratio: 16/9;
+	}
+
+	.bm-card__body {
+		padding: 1.5rem;
+	}
+
+	.bm-card__category {
+		font-size: 0.72rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-primary);
+	}
+
+	.bm-card__body h2 {
+		margin-top: 0.6rem;
+		font-size: 1.05rem;
+		line-height: 1.35;
+	}
+
+	.bm-card__body p {
+		margin-top: 0.6rem;
+		font-size: 0.88rem;
+		color: var(--text-body);
+		line-height: 1.55;
+	}
+
+	.bm-card__meta {
+		margin-top: 1rem;
+		font-size: 0.78rem;
+		color: var(--text-body);
+	}
+
+	@media (max-width: 900px) {
+		.bm-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

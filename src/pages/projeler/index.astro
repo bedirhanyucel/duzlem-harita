@@ -1,0 +1,322 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Icon from '../../components/Icon.astro';
+import TechnicalPlaceholder from '../../components/TechnicalPlaceholder.astro';
+import { company } from '../../data/company';
+
+const publishedProjects = (await getCollection('projects', ({ data }) => data.published)).sort(
+	(a, b) => (b.data.year ?? 0) - (a.data.year ?? 0),
+);
+
+const workAreas = [
+	{
+		icon: 'building',
+		title: 'Endüstriyel Tesis ve Saha Ölçümleri',
+		desc: 'Endüstriyel alanlarda hassas ölçüm ve teknik veri üretimi kapsamındaki çalışma alanı.',
+		variant: 'grid' as const,
+	},
+	{
+		icon: 'crane',
+		title: 'Yapı Aplikasyonu ve Şantiye Uygulamaları',
+		desc: 'İnşaat süreçlerinde aplikasyon ve saha kontrol ölçümlerini kapsayan çalışma alanı.',
+		variant: 'coordinate' as const,
+	},
+	{
+		icon: 'layers',
+		title: 'Parsel, Kadastro ve İmar Süreçleri',
+		desc: 'Parsel düzenleme ve imar uygulamalarına yönelik teknik çalışma alanı.',
+		variant: 'parcel' as const,
+	},
+];
+---
+
+<Layout
+	title="Projeler ve Çalışma Alanları | DüzlemSa Harita"
+	description="DüzlemSa Harita'nın parsel, şantiye, altyapı ve teknik harita üretimi alanlarındaki çalışma kapsamlarını inceleyin."
+>
+	<main id="main-content">
+		<div class="container">
+			<Breadcrumb items={[{ label: 'Ana Sayfa', href: '/' }, { label: 'Projeler' }]} />
+		</div>
+
+		<section class="projeler-hero bg-grid-dark">
+			<div class="container projeler-hero__inner">
+				<p class="eyebrow eyebrow--light">Projeler ve Çalışma Alanları</p>
+				<h1>Farklı ölçeklerde teknik ölçüm ve uygulama deneyimi</h1>
+				<p class="projeler-hero__desc">
+					Parsel uygulamalarından şantiye ölçümlerine, altyapı çalışmalarından teknik harita
+					üretimine kadar farklı proje ihtiyaçları için ölçüm ve mühendislik desteği sunuyoruz.
+				</p>
+			</div>
+		</section>
+
+		{
+			publishedProjects.length > 0 && (
+				<section class="projeler-section">
+					<div class="container">
+						<h2>Proje detayları</h2>
+						<div class="projeler-grid">
+							{publishedProjects.map((project) => (
+								<a href={`/projeler/${project.id}`} class="project-tile">
+									<div class="project-tile__visual">
+										<TechnicalPlaceholder variant="grid" icon="compass" showBadge={project.data.representative} label="Temsili görsel" />
+									</div>
+									<div class="project-tile__body">
+										<span class="project-tile__category">{project.data.category}</span>
+										<h3>{project.data.title}</h3>
+										<p>{project.data.summary}</p>
+									</div>
+								</a>
+							))}
+						</div>
+					</div>
+				</section>
+			)
+		}
+
+		<section class="projeler-section section--alt">
+			<div class="container">
+				<h2>Çalışma alanları</h2>
+				<p class="section-desc" style="margin-bottom:2.5rem;">
+					Gerçek proje referansları hazırlanana kadar hizmet verdiğimiz başlıca çalışma
+					alanlarını aşağıda inceleyebilirsiniz.
+				</p>
+				<div class="workarea-grid">
+					{
+						workAreas.map((area) => (
+							<article class="workarea-card">
+								<div class="workarea-card__visual">
+									<TechnicalPlaceholder variant={area.variant} icon={area.icon} showBadge={false} />
+								</div>
+								<div class="workarea-card__body">
+									<span class="workarea-card__label">Çalışma Alanı</span>
+									<h3>{area.title}</h3>
+									<p>{area.desc}</p>
+									<span class="workarea-card__note">
+										<Icon name="clock" class="icon-xs" />
+										Örnek uygulama kapsamı · Proje detayları hazırlanıyor
+									</span>
+								</div>
+							</article>
+						))
+					}
+				</div>
+				<p class="workarea-footnote">Gerçek proje içerikleri yakında eklenecek.</p>
+			</div>
+		</section>
+
+		<section class="projeler-cta">
+			<div class="container projeler-cta__box">
+				<h2>Projenizin kapsamını birlikte değerlendirelim</h2>
+				<p>Proje türü ve konumunu paylaşın, uygun çalışma yöntemini birlikte belirleyelim.</p>
+				<div class="projeler-cta__actions">
+					<a href="/teklif-al" class="btn btn-primary">Teklif Al</a>
+					<a href={company.contact.whatsappUriWithMessage} target="_blank" rel="noopener" class="btn btn-outline">
+						WhatsApp
+					</a>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.projeler-hero {
+		background: var(--color-charcoal);
+		color: var(--color-warm-white);
+		padding-block: clamp(3rem, 7vw, 5rem);
+	}
+
+	.projeler-hero__inner {
+		max-width: 700px;
+	}
+
+	.eyebrow--light {
+		color: var(--color-accent-olive);
+	}
+
+	.eyebrow--light::before {
+		background: var(--color-accent-olive);
+	}
+
+	.projeler-hero h1 {
+		color: var(--color-warm-white);
+	}
+
+	.projeler-hero__desc {
+		margin-top: 1.25rem;
+		font-size: 1.05rem;
+		line-height: 1.7;
+		color: rgba(246, 243, 238, 0.8);
+		max-width: 60ch;
+	}
+
+	.projeler-section {
+		padding-block: var(--section-padding-y);
+	}
+
+	.projeler-section h2 {
+		margin-bottom: 1rem;
+	}
+
+	.projeler-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.5rem;
+		margin-top: 1.5rem;
+	}
+
+	.project-tile {
+		display: block;
+		text-decoration: none;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		background: var(--bg-page);
+		transition: border-color 0.15s ease, box-shadow 0.15s ease;
+	}
+
+	.project-tile:hover {
+		border-color: var(--color-primary);
+		box-shadow: var(--shadow-md);
+	}
+
+	.project-tile__visual {
+		aspect-ratio: 4/3;
+	}
+
+	.project-tile__body {
+		padding: 1.5rem;
+	}
+
+	.project-tile__category {
+		font-size: 0.72rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-primary);
+	}
+
+	.project-tile__body h3 {
+		margin-top: 0.5rem;
+		font-size: 1.02rem;
+	}
+
+	.project-tile__body p {
+		margin-top: 0.5rem;
+		font-size: 0.88rem;
+		color: var(--text-body);
+		line-height: 1.55;
+	}
+
+	.workarea-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.75rem;
+	}
+
+	.workarea-card {
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		background: var(--bg-page);
+	}
+
+	.workarea-card__visual {
+		aspect-ratio: 4/3;
+	}
+
+	.workarea-card__body {
+		padding: 1.5rem;
+	}
+
+	.workarea-card__label {
+		display: inline-block;
+		font-size: 0.7rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-primary);
+		border: 1px solid var(--color-primary);
+		border-radius: 999px;
+		padding: 0.2rem 0.65rem;
+	}
+
+	.workarea-card__body h3 {
+		margin-top: 0.75rem;
+		font-size: 1.02rem;
+	}
+
+	.workarea-card__body p {
+		margin-top: 0.5rem;
+		font-size: 0.88rem;
+		color: var(--text-body);
+		line-height: 1.55;
+	}
+
+	.workarea-card__note {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		margin-top: 1rem;
+		font-size: 0.78rem;
+		color: var(--text-body);
+		font-style: italic;
+	}
+
+	.workarea-card__note :global(.icon-xs) {
+		width: 14px;
+		height: 14px;
+		flex-shrink: 0;
+	}
+
+	.workarea-footnote {
+		margin-top: 2rem;
+		text-align: center;
+		font-size: 0.85rem;
+		color: var(--text-body);
+		font-style: italic;
+	}
+
+	.projeler-cta {
+		padding-block: var(--section-padding-y);
+	}
+
+	.projeler-cta__box {
+		text-align: center;
+		max-width: 640px;
+		margin-inline: auto;
+		padding: clamp(2rem, 5vw, 3rem);
+		background: var(--bg-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+
+	.projeler-cta__box p {
+		margin-top: 1rem;
+		color: var(--text-body);
+	}
+
+	.projeler-cta__actions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1rem;
+		margin-top: 1.75rem;
+	}
+
+	@media (max-width: 900px) {
+		.projeler-grid,
+		.workarea-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.projeler-cta__actions .btn {
+			width: 100%;
+		}
+	}
+</style>

@@ -1,33 +1,47 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
 import '../styles/global.css';
+import { organizationSchema } from '../lib/schema';
 
 interface Props {
 	title?: string;
 	description?: string;
+	noindex?: boolean;
+	ogImage?: string;
+	structuredData?: object | object[];
 }
 
 const {
 	title = 'DüzlemSa Harita | Gaziantep Harita Mühendisliği',
 	description = "Gaziantep'te parsel sınır tespiti, aplikasyon, plankote, şantiye ölçümleri, imar ve kadastro uygulamaları için profesyonel harita mühendisliği çözümleri.",
+	noindex = false,
+	ogImage = '/og-default.svg',
+	structuredData,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
+
+const schemas = [organizationSchema(), ...(structuredData ? (Array.isArray(structuredData) ? structuredData : [structuredData]) : [])];
 ---
 
 <!doctype html>
 <html lang="tr">
 	<head>
+		<script is:inline>document.documentElement.classList.add('has-js');</script>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<meta name="generator" content={Astro.generator} />
 
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalURL} />
+		{noindex && <meta name="robots" content="noindex,follow" />}
 
 		<meta property="og:type" content="website" />
 		<meta property="og:locale" content="tr_TR" />
@@ -35,12 +49,43 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<meta property="og:description" content={description} />
 		<meta property="og:url" content={canonicalURL} />
 		<meta property="og:site_name" content="DüzlemSa Harita" />
+		<meta property="og:image" content={ogImageURL} />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageURL} />
 
 		<meta name="theme-color" content="#8e1f2d" />
+
+		{schemas.map((schema) => <script type="application/ld+json" set:html={JSON.stringify(schema)} />)}
+		<Analytics />
 	</head>
 	<body>
+		<a href="#main-content" class="skip-link">İçeriğe geç</a>
 		<Header />
 		<slot />
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.skip-link {
+		position: absolute;
+		top: -60px;
+		left: 1rem;
+		z-index: 100;
+		background: var(--color-charcoal);
+		color: var(--color-warm-white);
+		padding: 0.75rem 1.25rem;
+		border-radius: var(--radius-sm);
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 0.9rem;
+		transition: top 0.15s ease;
+	}
+
+	.skip-link:focus {
+		top: 1rem;
+	}
+</style>

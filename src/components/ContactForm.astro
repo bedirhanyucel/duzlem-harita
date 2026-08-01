@@ -1,0 +1,353 @@
+---
+import { getCollection } from 'astro:content';
+import { company } from '../data/company';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
+const formEnabled = Boolean(turnstileSiteKey);
+---
+
+<div class="contact-form-wrap">
+	{
+		!formEnabled && (
+			<div class="contact-form-offline" role="status">
+				<p>
+					<strong>Teklif formu şu anda çevrimdışı.</strong> Lütfen telefon veya WhatsApp
+					üzerinden bize ulaşın; en kısa sürede dönüş yapalım.
+				</p>
+				<div class="contact-form-offline__actions">
+					<a href={company.contact.phoneUri} class="btn btn-primary">Hemen Ara</a>
+					<a href={company.contact.whatsappUriWithMessage} target="_blank" rel="noopener" class="btn btn-outline">
+						WhatsApp
+					</a>
+				</div>
+			</div>
+		)
+	}
+
+	<form
+		class="contact-form"
+		id="contact-form"
+		method="POST"
+		action="/api/contact"
+		novalidate
+		aria-hidden={!formEnabled}
+		inert={!formEnabled}
+	>
+		<div class="contact-form__row">
+			<div class="field">
+				<label for="cf-name">Ad Soyad <span aria-hidden="true">*</span></label>
+				<input id="cf-name" name="name" type="text" required maxlength="120" autocomplete="name" />
+			</div>
+			<div class="field">
+				<label for="cf-phone">Telefon <span aria-hidden="true">*</span></label>
+				<input id="cf-phone" name="phone" type="tel" required maxlength="30" autocomplete="tel" placeholder="+90 5xx xxx xx xx" />
+			</div>
+		</div>
+
+		<div class="contact-form__row">
+			<div class="field">
+				<label for="cf-email">E-posta <span aria-hidden="true">*</span></label>
+				<input id="cf-email" name="email" type="email" required maxlength="160" autocomplete="email" />
+			</div>
+			<div class="field">
+				<label for="cf-company">Şirket / Kurum <span class="optional">(isteğe bağlı)</span></label>
+				<input id="cf-company" name="company" type="text" maxlength="160" autocomplete="organization" />
+			</div>
+		</div>
+
+		<div class="contact-form__row">
+			<div class="field">
+				<label for="cf-service">Hizmet Türü <span aria-hidden="true">*</span></label>
+				<select id="cf-service" name="service" required>
+					<option value="">Seçiniz</option>
+					{services.map((s) => <option value={s.data.shortTitle}>{s.data.shortTitle}</option>)}
+					<option value="Emin değilim">Emin değilim</option>
+				</select>
+			</div>
+			<div class="field">
+				<label for="cf-location">Proje Konumu <span aria-hidden="true">*</span></label>
+				<input id="cf-location" name="location" type="text" required maxlength="200" placeholder="İlçe / mahalle" />
+			</div>
+		</div>
+
+		<div class="contact-form__row">
+			<div class="field">
+				<label for="cf-ada">Ada <span class="optional">(isteğe bağlı)</span></label>
+				<input id="cf-ada" name="ada" type="text" maxlength="60" />
+			</div>
+			<div class="field">
+				<label for="cf-parsel">Parsel <span class="optional">(isteğe bağlı)</span></label>
+				<input id="cf-parsel" name="parsel" type="text" maxlength="60" />
+			</div>
+		</div>
+
+		<div class="field">
+			<label for="cf-message">Proje / Talep Açıklaması <span aria-hidden="true">*</span></label>
+			<textarea id="cf-message" name="message" rows="5" required minlength="10" maxlength="4000" />
+		</div>
+
+		<fieldset class="field contact-pref">
+			<legend>İletişim Tercihi</legend>
+			<label><input type="radio" name="contactPreference" value="Telefon" checked /> Telefon</label>
+			<label><input type="radio" name="contactPreference" value="E-posta" /> E-posta</label>
+			<label><input type="radio" name="contactPreference" value="WhatsApp" /> WhatsApp</label>
+		</fieldset>
+
+		<p class="contact-form__note">
+			Tapu, proje veya diğer belgelerinizi ilk iletişim sonrasında WhatsApp ya da e-posta
+			üzerinden paylaşabilirsiniz.
+		</p>
+
+		<label class="field field--checkbox">
+			<input type="checkbox" name="kvkk" required />
+			<span>
+				Bilgilerimin yalnızca bu talebi değerlendirmek ve benimle iletişime geçmek amacıyla
+				işlenmesini kabul ediyorum.
+				<span aria-hidden="true">*</span>
+			</span>
+		</label>
+
+		<div class="field field--honeypot" aria-hidden="true">
+			<label for="cf-website">Website</label>
+			<input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+		</div>
+
+		{
+			formEnabled && (
+				<div class="cf-turnstile" data-sitekey={turnstileSiteKey} />
+			)
+		}
+
+		<div class="contact-form__status" role="status" aria-live="polite" id="cf-status" />
+
+		<button type="submit" class="btn btn-primary contact-form__submit" disabled={!formEnabled}>
+			Gönder
+		</button>
+	</form>
+</div>
+
+{
+	formEnabled && (
+		<script async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js" />
+	)
+}
+
+<script>
+	const form = document.getElementById('contact-form') as HTMLFormElement | null;
+	const status = document.getElementById('cf-status');
+
+	if (form && status) {
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			const submitBtn = form.querySelector<HTMLButtonElement>('.contact-form__submit');
+
+			if (!form.checkValidity()) {
+				form.reportValidity();
+				return;
+			}
+
+			submitBtn?.setAttribute('disabled', 'true');
+			status.textContent = 'Gönderiliyor…';
+			status.className = 'contact-form__status';
+
+			try {
+				const formData = new FormData(form);
+				const payload = Object.fromEntries(formData.entries());
+				const res = await fetch('/api/contact', {
+					method: 'POST',
+					headers: { 'content-type': 'application/json' },
+					body: JSON.stringify(payload),
+				});
+				const data = (await res.json().catch(() => ({ ok: false }))) as { ok: boolean; error?: string };
+
+				if (res.ok && data.ok) {
+					status.textContent = 'Talebiniz alındı. En kısa sürede size dönüş yapacağız.';
+					status.className = 'contact-form__status contact-form__status--success';
+					form.reset();
+				} else {
+					status.textContent =
+						'Talebiniz gönderilemedi. Lütfen telefon veya WhatsApp üzerinden bize ulaşın.';
+					status.className = 'contact-form__status contact-form__status--error';
+				}
+			} catch {
+				status.textContent =
+					'Bir bağlantı sorunu oluştu. Lütfen telefon veya WhatsApp üzerinden bize ulaşın.';
+				status.className = 'contact-form__status contact-form__status--error';
+			} finally {
+				submitBtn?.removeAttribute('disabled');
+			}
+		});
+	}
+</script>
+
+<style>
+	.contact-form-wrap {
+		max-width: 720px;
+	}
+
+	.contact-form-offline {
+		padding: 1.5rem;
+		background: var(--bg-surface);
+		border: 1px solid var(--color-border);
+		border-left: 3px solid var(--color-primary);
+		border-radius: var(--radius-md);
+		margin-bottom: 2rem;
+	}
+
+	.contact-form-offline p {
+		font-size: 0.95rem;
+		line-height: 1.6;
+		color: var(--text-heading);
+	}
+
+	.contact-form-offline__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: 1.25rem;
+	}
+
+	.contact-form[inert] {
+		opacity: 0.45;
+	}
+
+	.contact-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.contact-form__row {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: 1.25rem;
+	}
+
+	.field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		min-width: 0;
+	}
+
+	.field input,
+	.field select,
+	.field textarea {
+		width: 100%;
+		min-width: 0;
+	}
+
+	.field label,
+	.contact-pref legend {
+		font-size: 0.86rem;
+		font-weight: 700;
+		color: var(--text-heading);
+	}
+
+	.field .optional {
+		font-weight: 400;
+		color: var(--text-body);
+		font-size: 0.8rem;
+	}
+
+	.field input[type='text'],
+	.field input[type='tel'],
+	.field input[type='email'],
+	.field select,
+	.field textarea {
+		font: inherit;
+		padding: 0.7rem 0.9rem;
+		border: 1px solid var(--color-soft-gray);
+		border-radius: var(--radius-sm);
+		background: var(--bg-surface);
+		color: var(--text-heading);
+	}
+
+	.field input:focus-visible,
+	.field select:focus-visible,
+	.field textarea:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 1px;
+	}
+
+	.contact-pref {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1.25rem;
+		border: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.contact-pref label {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-weight: 500;
+		font-size: 0.9rem;
+	}
+
+	.contact-form__note {
+		font-size: 0.82rem;
+		color: var(--text-body);
+		font-style: italic;
+	}
+
+	.field--checkbox {
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 0.6rem;
+	}
+
+	.field--checkbox input {
+		margin-top: 0.2rem;
+	}
+
+	.field--checkbox span {
+		font-size: 0.86rem;
+		font-weight: 400;
+		color: var(--text-body);
+		line-height: 1.5;
+	}
+
+	.field--honeypot {
+		position: absolute;
+		left: -9999px;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+	}
+
+	.contact-form__status {
+		font-size: 0.9rem;
+		min-height: 1.2em;
+	}
+
+	.contact-form__status--success {
+		color: #4a6b2a;
+	}
+
+	.contact-form__status--error {
+		color: var(--color-primary);
+	}
+
+	.contact-form__submit {
+		align-self: flex-start;
+	}
+
+	.contact-form__submit[disabled] {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	@media (max-width: 640px) {
+		.contact-form__row {
+			grid-template-columns: 1fr;
+		}
+
+		.contact-form__submit {
+			width: 100%;
+		}
+	}
+</style>

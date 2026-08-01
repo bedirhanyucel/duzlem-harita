@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+	<defs>
+		<pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+			<path d="M 42 0 L 0 0 0 42" fill="none" stroke="#f6f3ee" stroke-opacity="0.07" stroke-width="1" />
+		</pattern>
+	</defs>
+	<rect width="1200" height="630" fill="#14181b" />
+	<rect width="1200" height="630" fill="url(#grid)" />
+	<path d="M-40 460 C 220 380, 380 500, 620 420 S 1040 340, 1240 400" fill="none" stroke="#8e1f2d" stroke-opacity="0.5" stroke-width="2" />
+	<path d="M-40 360 C 260 300, 400 400, 660 340 S 1060 270, 1240 310" fill="none" stroke="#9fb36a" stroke-opacity="0.35" stroke-width="2" />
+	<text x="90" y="270" font-family="-apple-system,Segoe UI,Roboto,Arial,sans-serif" font-size="64" font-weight="700" fill="#f6f3ee">DüzlemSa Harita</text>
+	<text x="90" y="330" font-family="-apple-system,Segoe UI,Roboto,Arial,sans-serif" font-size="30" fill="#9fb36a" letter-spacing="1">Gaziantep Harita Mühendisliği</text>
+	<text x="90" y="400" font-family="-apple-system,Segoe UI,Roboto,Arial,sans-serif" font-size="26" fill="#d9d6d1">Doğru Ölçüm. Güvenilir Zemin. Net Sonuç.</text>
+</svg>

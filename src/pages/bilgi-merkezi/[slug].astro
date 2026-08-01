@@ -1,0 +1,303 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import FinalCTA from '../../components/FinalCTA.astro';
+import { articleSchema } from '../../lib/schema';
+
+export async function getStaticPaths() {
+	const articles = await getCollection('articles', ({ data }) => !data.draft);
+	return articles.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content, headings } = await render(entry);
+
+const toc = headings.filter((h) => h.depth === 2);
+
+const relatedServiceEntries = (
+	await Promise.all(data.relatedServices.map((slug) => getEntry('services', slug)))
+).filter((s): s is NonNullable<typeof s> => Boolean(s));
+
+const allArticles = await getCollection('articles', ({ data: d }) => !d.draft);
+const relatedArticles = allArticles
+	.filter((a) => a.id !== entry.id && a.data.category === data.category)
+	.slice(0, 2);
+
+const dateFormatter = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Layout
+	title={data.seoTitle}
+	description={data.seoDescription}
+	structuredData={articleSchema({
+		title: data.title,
+		description: data.description,
+		slug: entry.id,
+		publishedAt: data.publishedAt,
+		updatedAt: data.updatedAt,
+	})}
+>
+	<main id="main-content">
+		<div class="container">
+			<Breadcrumb
+				items={[
+					{ label: 'Ana Sayfa', href: '/' },
+					{ label: 'Bilgi Merkezi', href: '/bilgi-merkezi' },
+					{ label: data.title },
+				]}
+			/>
+		</div>
+
+		<article class="article">
+			<header class="article__header container">
+				<span class="article__category">{data.category}</span>
+				<h1>{data.title}</h1>
+				<p class="article__intro">{data.description}</p>
+				<div class="article__meta">
+					<span>{data.author}</span>
+					<span aria-hidden="true">·</span>
+					<time datetime={data.publishedAt.toISOString()}>
+						{dateFormatter.format(data.publishedAt)}
+					</time>
+					{data.readingTime && <span aria-hidden="true">·</span>}
+					{data.readingTime && <span>{data.readingTime}</span>}
+				</div>
+			</header>
+
+			<div class="container article__layout">
+				<div class="article__body">
+					<Content />
+				</div>
+
+				{
+					toc.length > 0 && (
+						<aside class="article__toc" aria-label="İçindekiler">
+							<h2>İçindekiler</h2>
+							<ul>
+								{toc.map((h) => (
+									<li>
+										<a href={`#${h.slug}`}>{h.text}</a>
+									</li>
+								))}
+							</ul>
+						</aside>
+					)
+				}
+			</div>
+		</article>
+
+		{
+			(relatedServiceEntries.length > 0 || relatedArticles.length > 0) && (
+				<section class="article-related container">
+					{relatedServiceEntries.length > 0 && (
+						<div class="article-related__block">
+							<h2>İlgili hizmetler</h2>
+							<div class="service-related">
+								{relatedServiceEntries.map((s) => (
+									<ServiceCard
+										href={`/hizmetler/${s.id}`}
+										icon={s.data.icon}
+										title={s.data.shortTitle}
+										summary={s.data.summary}
+									/>
+								))}
+							</div>
+						</div>
+					)}
+
+					{relatedArticles.length > 0 && (
+						<div class="article-related__block">
+							<h2>İlgili diğer yazılar</h2>
+							<ul class="related-articles">
+								{relatedArticles.map((a) => (
+									<li>
+										<a href={`/bilgi-merkezi/${a.id}`}>{a.data.title}</a>
+									</li>
+								))}
+							</ul>
+						</div>
+					)}
+				</section>
+			)
+		}
+
+		<FinalCTA
+			title="Projenizle ilgili teknik bir sorunuz mu var?"
+			description="Kısa bir açıklama paylaşın; ihtiyacınıza uygun hizmeti birlikte belirleyelim."
+		/>
+	</main>
+</Layout>
+
+<style>
+	.article__header {
+		padding-block: clamp(2.5rem, 6vw, 4rem) 2rem;
+		max-width: 76ch;
+	}
+
+	.article__category {
+		display: inline-block;
+		font-size: 0.75rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-primary);
+		margin-bottom: 0.75rem;
+	}
+
+	.article__intro {
+		margin-top: 1.1rem;
+		font-size: 1.1rem;
+		line-height: 1.7;
+		color: var(--text-body);
+	}
+
+	.article__meta {
+		display: flex;
+		gap: 0.5rem;
+		margin-top: 1.25rem;
+		font-size: 0.85rem;
+		color: var(--text-body);
+	}
+
+	.article__layout {
+		display: grid;
+		grid-template-columns: 1fr 260px;
+		gap: 3rem;
+		align-items: start;
+		padding-bottom: var(--section-padding-y);
+	}
+
+	.article__body {
+		max-width: 72ch;
+		font-size: 1.02rem;
+		line-height: 1.85;
+		color: var(--text-body);
+	}
+
+	.article__body :global(h2) {
+		margin-top: 2.5rem;
+		margin-bottom: 1rem;
+		font-size: 1.4rem;
+		scroll-margin-top: 100px;
+	}
+
+	.article__body :global(h3) {
+		margin-top: 1.75rem;
+		margin-bottom: 0.75rem;
+		font-size: 1.1rem;
+		scroll-margin-top: 100px;
+	}
+
+	.article__body :global(p) {
+		margin-bottom: 1.1rem;
+	}
+
+	.article__body :global(ul),
+	.article__body :global(ol) {
+		margin: 0 0 1.1rem;
+		padding-left: 1.4rem;
+		list-style: revert;
+		display: block;
+	}
+
+	.article__body :global(li) {
+		margin-bottom: 0.5rem;
+	}
+
+	.article__body :global(a) {
+		color: var(--color-primary);
+		font-weight: 600;
+	}
+
+	.article__body :global(strong) {
+		color: var(--text-heading);
+	}
+
+	.article__toc {
+		position: sticky;
+		top: 100px;
+		padding: 1.25rem;
+		background: var(--bg-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+	}
+
+	.article__toc h2 {
+		font-size: 0.85rem;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		margin-bottom: 0.9rem;
+	}
+
+	.article__toc ul {
+		display: flex;
+		flex-direction: column;
+		gap: 0.55rem;
+	}
+
+	.article__toc a {
+		font-size: 0.85rem;
+		color: var(--text-body);
+		text-decoration: none;
+		line-height: 1.4;
+	}
+
+	.article__toc a:hover {
+		color: var(--color-primary);
+	}
+
+	.article-related {
+		padding-bottom: var(--section-padding-y);
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+	}
+
+	.article-related__block h2 {
+		margin-bottom: 1.25rem;
+		font-size: 1.2rem;
+	}
+
+	.service-related {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+	}
+
+	.related-articles {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.related-articles a {
+		font-weight: 600;
+		color: var(--color-primary);
+		text-decoration: none;
+	}
+
+	.related-articles a:hover {
+		text-decoration: underline;
+	}
+
+	@media (max-width: 900px) {
+		.article__layout {
+			grid-template-columns: 1fr;
+		}
+
+		.article__toc {
+			position: static;
+			order: -1;
+		}
+
+		.service-related {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

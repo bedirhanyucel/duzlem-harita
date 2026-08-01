@@ -1,0 +1,247 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import TechnicalPlaceholder from '../../components/TechnicalPlaceholder.astro';
+import FinalCTA from '../../components/FinalCTA.astro';
+
+export async function getStaticPaths() {
+	const projects = await getCollection('projects', ({ data }) => data.published);
+	return projects.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const relatedServiceEntries = (
+	await Promise.all(data.services.map((slug) => getEntry('services', slug)))
+).filter((s): s is NonNullable<typeof s> => Boolean(s));
+---
+
+<Layout
+	title={data.seoTitle ?? `${data.title} | DüzlemSa Harita`}
+	description={data.seoDescription ?? data.summary}
+>
+	<main id="main-content">
+		<div class="container">
+			<Breadcrumb
+				items={[
+					{ label: 'Ana Sayfa', href: '/' },
+					{ label: 'Projeler', href: '/projeler' },
+					{ label: data.title },
+				]}
+			/>
+		</div>
+
+		<section class="project-hero">
+			<div class="container project-hero__inner">
+				<div>
+					<span class="project-hero__category">{data.category}</span>
+					<h1>{data.title}</h1>
+					<p class="project-hero__summary">{data.summary}</p>
+					<dl class="project-hero__meta">
+						{data.location && <div><dt>Konum</dt><dd>{data.location}</dd></div>}
+						{data.year && <div><dt>Yıl</dt><dd>{data.year}</dd></div>}
+					</dl>
+				</div>
+				<div class="project-hero__visual">
+					<TechnicalPlaceholder variant="grid" icon="compass" label="Temsili görsel" showBadge={data.representative} />
+				</div>
+			</div>
+		</section>
+
+		<section class="project-section">
+			<div class="container project-section__narrow">
+				<div class="service-prose">
+					<Content />
+				</div>
+			</div>
+		</section>
+
+		{
+			(data.methods.length > 0 || data.deliverables.length > 0) && (
+				<section class="project-section section--alt">
+					<div class="container project-info-grid">
+						{data.methods.length > 0 && (
+							<div>
+								<h2>Kullanılan yöntem</h2>
+								<ul class="service-checklist">
+									{data.methods.map((m) => <li>{m}</li>)}
+								</ul>
+							</div>
+						)}
+						{data.deliverables.length > 0 && (
+							<div>
+								<h2>Teslim edilen çıktılar</h2>
+								<ul class="service-checklist">
+									{data.deliverables.map((d) => <li>{d}</li>)}
+								</ul>
+							</div>
+						)}
+					</div>
+				</section>
+			)
+		}
+
+		{
+			relatedServiceEntries.length > 0 && (
+				<section class="project-section">
+					<div class="container">
+						<h2>İlgili hizmetler</h2>
+						<div class="service-related">
+							{relatedServiceEntries.map((s) => (
+								<ServiceCard
+									href={`/hizmetler/${s.id}`}
+									icon={s.data.icon}
+									title={s.data.shortTitle}
+									summary={s.data.summary}
+								/>
+							))}
+						</div>
+					</div>
+				</section>
+			)
+		}
+
+		<FinalCTA
+			title="Benzer bir proje için teknik değerlendirme alın"
+			description="Proje konumu ve kapsamını iletin; size uygun yöntemi birlikte belirleyelim."
+		/>
+	</main>
+</Layout>
+
+<style>
+	.project-hero {
+		padding-block: clamp(2.5rem, 6vw, 4rem);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.project-hero__inner {
+		display: grid;
+		grid-template-columns: 1.3fr 0.7fr;
+		gap: 3rem;
+		align-items: center;
+	}
+
+	.project-hero__category {
+		display: inline-block;
+		font-size: 0.75rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-primary);
+		margin-bottom: 0.75rem;
+	}
+
+	.project-hero__summary {
+		margin-top: 1rem;
+		font-size: 1.05rem;
+		line-height: 1.7;
+		color: var(--text-body);
+		max-width: 60ch;
+	}
+
+	.project-hero__meta {
+		display: flex;
+		gap: 2rem;
+		margin-top: 1.5rem;
+	}
+
+	.project-hero__meta dt {
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--text-body);
+	}
+
+	.project-hero__meta dd {
+		margin: 0.2rem 0 0;
+		font-weight: 700;
+		color: var(--text-heading);
+	}
+
+	.project-hero__visual {
+		aspect-ratio: 4/3;
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+	}
+
+	.project-section {
+		padding-block: clamp(2.75rem, 5vw, 4rem);
+	}
+
+	.project-section__narrow {
+		max-width: 72ch;
+	}
+
+	.service-prose {
+		display: flex;
+		flex-direction: column;
+		gap: 1.1rem;
+		font-size: 1.02rem;
+		line-height: 1.8;
+		color: var(--text-body);
+	}
+
+	.project-info-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3rem;
+	}
+
+	.project-info-grid h2 {
+		margin-bottom: 1.25rem;
+	}
+
+	.service-checklist {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.service-checklist li {
+		padding-left: 1.1rem;
+		position: relative;
+		font-size: 0.93rem;
+		color: var(--text-heading);
+		line-height: 1.5;
+	}
+
+	.service-checklist li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.5em;
+		width: 6px;
+		height: 6px;
+		background: var(--color-primary);
+	}
+
+	.service-related {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+	}
+
+	@media (max-width: 900px) {
+		.project-hero__inner {
+			grid-template-columns: 1fr;
+		}
+
+		.project-hero__visual {
+			max-width: 320px;
+			margin-inline: auto;
+			order: -1;
+		}
+
+		.project-info-grid,
+		.service-related {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

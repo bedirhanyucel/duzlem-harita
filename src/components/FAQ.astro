@@ -1,24 +1,8 @@
 ---
 import FAQList from './FAQList.astro';
+import { getHomepageFaqs } from '../data/faq';
 
-const faqs = [
-	{
-		q: 'Parsel sınır tespiti nasıl yapılır?',
-		a: 'Tapu ve kadastro kayıtları incelenerek, saha üzerinde GNSS/RTK veya total station ile ölçüm yapılır; sınır ve köşe noktaları teknik olarak belirlenip aplikasyonu gerçekleştirilir.',
-	},
-	{
-		q: 'Plankote hangi durumlarda gerekir?',
-		a: 'Yapı projelendirme, zemin kotu belirleme ve şantiye planlaması öncesinde arazinin mevcut durumunu gösteren plankote çalışması gerekir.',
-	},
-	{
-		q: 'İfraz ve tevhit işlemleri nedir?',
-		a: 'İfraz, bir parselin birden fazla parçaya ayrılması; tevhit ise birden fazla parselin tek parselde birleştirilmesi işlemidir. Her ikisi de imar mevzuatına uygun teknik dosya ile yürütülür.',
-	},
-	{
-		q: 'Teklif almak için hangi bilgiler gereklidir?',
-		a: 'Parsel/ada bilgisi veya konum, proje türü ve varsa mevcut proje/imar bilgileri ile iletişime geçmeniz yeterlidir. Kapsamı birlikte netleştiririz.',
-	},
-];
+const faqs = getHomepageFaqs();
 ---
 
 <section class="faq section--alt" id="sss">
@@ -26,6 +10,9 @@ const faqs = [
 		<div class="section-head">
 			<p class="eyebrow">SSS</p>
 			<h2>Sıkça sorulan sorular</h2>
+			<p class="section-desc">
+				<a href="/sss">Tüm soruları görüntüleyin →</a>
+			</p>
 		</div>
 
 		<FAQList items={faqs} />
@@ -37,6 +24,16 @@ const faqs = [
 		display: grid;
 		grid-template-columns: 0.8fr 1.2fr;
 		gap: 3rem;
+	}
+
+	.section-desc a {
+		color: var(--color-primary);
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.section-desc a:hover {
+		text-decoration: underline;
 	}
 
 	@media (max-width: 900px) {

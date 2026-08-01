@@ -7,6 +7,7 @@ import ServiceCard from '../components/ServiceCard.astro';
 import FAQList from '../components/FAQList.astro';
 import FinalCTA from '../components/FinalCTA.astro';
 import { serviceCategories } from '../data/serviceCategories';
+import { company } from '../data/company';
 
 interface Props {
 	entry: CollectionEntry<'services'>;
@@ -48,7 +49,7 @@ const jsonLd = {
 	areaServed: 'Gaziantep, Türkiye',
 	provider: {
 		'@type': 'ProfessionalService',
-		name: 'DuzlemSa',
+		name: company.legalName,
 		areaServed: 'Gaziantep',
 	},
 };
@@ -57,7 +58,7 @@ const jsonLd = {
 <Layout title={data.seoTitle} description={data.seoDescription}>
 	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-	<main>
+	<main id="main-content">
 		<div class="container">
 			<Breadcrumb
 				items={[
@@ -77,7 +78,7 @@ const jsonLd = {
 					<div class="service-hero__actions">
 						<a href="#son-cta" class="btn btn-primary">Teklif Al</a>
 						<a
-							href="https://wa.me/905388751998"
+							href={company.contact.whatsappUriWithMessage}
 							target="_blank"
 							rel="noopener"
 							class="btn btn-outline"

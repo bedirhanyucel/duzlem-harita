@@ -1,0 +1,185 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Icon from '../components/Icon.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { company } from '../data/company';
+import { contactPageSchema } from '../lib/schema';
+
+const cards = [
+	{ icon: 'phone', label: 'Telefon', value: company.contact.phoneDisplay, href: company.contact.phoneUri },
+	{ icon: 'chat', label: 'WhatsApp', value: 'Mesaj gönderin', href: company.contact.whatsappUriWithMessage, external: true },
+	{ icon: 'mail', label: 'E-posta', value: company.contact.email, href: `mailto:${company.contact.email}` },
+	{ icon: 'mappin', label: 'Adres', value: company.address.full, href: company.address.mapsSearchUrl, external: true },
+];
+---
+
+<Layout
+	title="İletişim | DüzlemSa Harita Gaziantep"
+	description="DüzlemSa Harita ile telefon, WhatsApp veya teklif formu üzerinden iletişime geçin. Şehitkamil Gaziantep adres ve iletişim bilgileri."
+	structuredData={contactPageSchema()}
+>
+	<main id="main-content">
+		<div class="container">
+			<Breadcrumb items={[{ label: 'Ana Sayfa', href: '/' }, { label: 'İletişim' }]} />
+		</div>
+
+		<section class="iletisim-hero">
+			<div class="container">
+				<p class="eyebrow">İletişim</p>
+				<h1>Projenizi anlatın, teknik kapsamı birlikte değerlendirelim</h1>
+			</div>
+		</section>
+
+		<section class="iletisim-section">
+			<div class="container iletisim-layout">
+				<div class="iletisim-cards">
+					{
+						cards.map((c) => (
+							<a href={c.href} class="contact-card" target={c.external ? '_blank' : undefined} rel={c.external ? 'noopener' : undefined}>
+								<Icon name={c.icon} class="contact-card__icon" />
+								<div>
+									<span class="contact-card__label">{c.label}</span>
+									<span class="contact-card__value">{c.value}</span>
+								</div>
+							</a>
+						))
+					}
+
+					<div class="map-card">
+						<h2>Konum</h2>
+						<p>{company.address.line1}<br />{company.address.line2}<br />{company.address.line3}</p>
+						<a href={company.address.mapsSearchUrl} target="_blank" rel="noopener" class="btn btn-outline map-card__btn">
+							<Icon name="mappin" class="icon-xs" />
+							Google Maps'te Ara / Yol Tarifi Al
+						</a>
+						<p class="map-card__note">
+							Doğrulanmış işletme koordinatı eklenene kadar harita gömme (embed) kullanılmıyor;
+							yukarıdaki bağlantı adres aramasıyla Google Maps'i açar.
+						</p>
+					</div>
+				</div>
+
+				<div class="iletisim-form">
+					<h2>Teklif ve Bilgi Formu</h2>
+					<ContactForm />
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.iletisim-hero {
+		padding-block: clamp(2.5rem, 6vw, 4rem);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.iletisim-hero h1 {
+		max-width: 42ch;
+	}
+
+	.iletisim-section {
+		padding-block: var(--section-padding-y);
+	}
+
+	.iletisim-layout {
+		display: grid;
+		grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+		gap: 3rem;
+		align-items: start;
+	}
+
+	.iletisim-cards {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.contact-card {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1.1rem 1.25rem;
+		background: var(--bg-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		transition: border-color 0.15s ease;
+	}
+
+	.contact-card:hover {
+		border-color: var(--color-primary);
+	}
+
+	.contact-card :global(.contact-card__icon) {
+		width: 22px;
+		height: 22px;
+		flex-shrink: 0;
+		color: var(--color-primary);
+	}
+
+	.contact-card__label {
+		display: block;
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--text-body);
+	}
+
+	.contact-card__value {
+		display: block;
+		margin-top: 0.15rem;
+		font-weight: 700;
+		color: var(--text-heading);
+		font-size: 0.95rem;
+	}
+
+	.map-card {
+		margin-top: 0.5rem;
+		padding: 1.5rem;
+		background: var(--bg-page);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+	}
+
+	.map-card h2 {
+		font-size: 1.05rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.map-card p {
+		font-size: 0.9rem;
+		color: var(--text-body);
+		line-height: 1.6;
+	}
+
+	.map-card__btn {
+		display: inline-flex;
+		margin-top: 1.25rem;
+	}
+
+	.map-card__btn :global(.icon-xs) {
+		width: 15px;
+		height: 15px;
+	}
+
+	.map-card__note {
+		margin-top: 1rem;
+		font-size: 0.78rem;
+		font-style: italic;
+		color: var(--text-body);
+	}
+
+	.iletisim-form h2 {
+		font-size: 1.15rem;
+		margin-bottom: 1.5rem;
+	}
+
+	@media (max-width: 900px) {
+		.iletisim-layout {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 2.5rem;
+		}
+	}
+</style>

@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import { company } from '../data/company';
 
 interface Props {
 	title?: string;
@@ -18,15 +19,15 @@ const {
 		<p>{description}</p>
 
 		<div class="cta__actions">
-			<a href="mailto:duzlemsaharita@gmail.com" class="btn btn-primary">
+			<a href="/teklif-al" class="btn btn-primary">
 				<Icon name="mail" class="icon-xs" />
 				Teklif Al
 			</a>
-			<a href="tel:+905388751998" class="btn btn-outline-light">
+			<a href={company.contact.phoneUri} class="btn btn-outline-light">
 				<Icon name="phone" class="icon-xs" />
 				Hemen Ara
 			</a>
-			<a href="https://wa.me/905388751998" target="_blank" rel="noopener" class="btn btn-outline-light">
+			<a href={company.contact.whatsappUriWithMessage} target="_blank" rel="noopener" class="btn btn-outline-light">
 				<Icon name="chat" class="icon-xs" />
 				WhatsApp
 			</a>
@@ -35,15 +36,15 @@ const {
 		<div class="cta__details">
 			<div>
 				<Icon name="mappin" class="icon-xs" />
-				<span>Değirmiçem Mah. Sabahat Göğüş Cad. Anadolu İş Merkezi No: 23/23, Şehitkamil / Gaziantep</span>
+				<span>{company.address.full}</span>
 			</div>
 			<div>
 				<Icon name="phone" class="icon-xs" />
-				<span>+90 538 875 19 98</span>
+				<span>{company.contact.phoneDisplay}</span>
 			</div>
 			<div>
 				<Icon name="mail" class="icon-xs" />
-				<span>duzlemsaharita@gmail.com</span>
+				<span>{company.contact.email}</span>
 			</div>
 		</div>
 	</div>

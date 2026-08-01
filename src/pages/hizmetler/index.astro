@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import MainServices from '../../components/MainServices.astro';
 import CategorySection from '../../components/CategorySection.astro';
 import { serviceCategories } from '../../data/serviceCategories';
+import { company } from '../../data/company';
 
 const allServices = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -12,7 +13,7 @@ const allServices = (await getCollection('services')).sort((a, b) => a.data.orde
 	title="Harita Mühendisliği Hizmetleri | DüzlemSa Harita"
 	description="Gaziantep'te aplikasyon, plankote, şantiye ölçümleri, ifraz, tevhit, imar uygulamaları, halihazır harita ve teknik ölçüm hizmetleri."
 >
-	<main>
+	<main id="main-content">
 		<section class="hizmetler-hero bg-grid-dark">
 			<div class="container hizmetler-hero__inner">
 				<p class="eyebrow eyebrow--light">DüzlemSa Harita Hizmetleri</p>
@@ -22,9 +23,9 @@ const allServices = (await getCollection('services')).sort((a, b) => a.data.orde
 					uygun ölçüm ve teknik uygulama hizmetleri sunuyoruz.
 				</p>
 				<div class="hizmetler-hero__actions">
-					<a href="/#iletisim" class="btn btn-primary">Projenizi Anlatın</a>
+					<a href="/teklif-al" class="btn btn-primary">Projenizi Anlatın</a>
 					<a
-						href="https://wa.me/905388751998"
+						href={company.contact.whatsappUriWithMessage}
 						target="_blank"
 						rel="noopener"
 						class="btn btn-outline-light"
@@ -55,9 +56,9 @@ const allServices = (await getCollection('services')).sort((a, b) => a.data.orde
 						kapsamı birlikte değerlendirelim.
 					</p>
 					<div class="finder-cta__actions">
-						<a href="/#iletisim" class="btn btn-primary">Teklif ve Bilgi Talebi</a>
+						<a href="/teklif-al" class="btn btn-primary">Teklif ve Bilgi Talebi</a>
 						<a
-							href="https://wa.me/905388751998"
+							href={company.contact.whatsappUriWithMessage}
 							target="_blank"
 							rel="noopener"
 							class="btn btn-outline"

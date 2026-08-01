@@ -22,7 +22,7 @@ const projects = [
 		<div class="projects__grid">
 			{
 				projects.map((p) => (
-					<article class="project-card">
+					<a href="/projeler" class="project-card">
 						<div class="project-card__visual" aria-hidden="true">
 							<Icon name={p.icon} />
 						</div>
@@ -31,9 +31,13 @@ const projects = [
 							<p>{p.desc}</p>
 							<span class="project-card__tag">Detaylar yakında eklenecek</span>
 						</div>
-					</article>
+					</a>
 				))
 			}
+		</div>
+
+		<div class="projects__more">
+			<a href="/projeler" class="btn btn-outline">Tüm Çalışma Alanlarını İncele</a>
 		</div>
 	</div>
 </section>
@@ -46,10 +50,23 @@ const projects = [
 	}
 
 	.project-card {
+		display: block;
+		text-decoration: none;
 		background: var(--bg-page);
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-lg);
 		overflow: hidden;
+		transition: border-color 0.15s ease, box-shadow 0.15s ease;
+	}
+
+	.project-card:hover {
+		border-color: var(--color-primary);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.projects__more {
+		text-align: center;
+		margin-top: 2.25rem;
 	}
 
 	.project-card__visual {
