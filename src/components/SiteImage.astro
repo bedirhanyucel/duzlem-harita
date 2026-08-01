@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import TechnicalPlaceholder from './TechnicalPlaceholder.astro';
+import { media } from '../data/media';
+
+interface Props {
+	mediaKey: string;
+	priority?: boolean;
+	class?: string;
+	sizes?: string;
+}
+
+const { mediaKey, priority = false, class: className = '', sizes } = Astro.props;
+const entry = media[mediaKey];
+---
+
+{
+	entry?.type === 'photo' && entry.src ? (
+		<div class={`site-image ${className}`}>
+			<Image
+				src={entry.src}
+				alt={entry.alt}
+				format="webp"
+				quality={80}
+				loading={priority ? 'eager' : 'lazy'}
+				fetchpriority={priority ? 'high' : 'auto'}
+				sizes={sizes}
+				class="site-image__img"
+			/>
+		</div>
+	) : (
+		<TechnicalPlaceholder variant={entry?.variant ?? 'contour'} icon={entry?.icon} class={className} />
+	)
+}
+
+<style>
+	.site-image {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	.site-image__img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+</style>

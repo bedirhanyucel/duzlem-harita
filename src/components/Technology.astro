@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import SiteImage from './SiteImage.astro';
 
 const equipment = [
 	{ icon: 'satellite', label: 'GNSS / RTK Ölçüm Sistemleri' },
@@ -25,26 +26,32 @@ const software = ['Netcad', 'AutoCAD', 'Civil 3D', 'ArcGIS', 'QGIS', 'Pix4D', 'A
 		</div>
 
 		<div class="tech__layout">
-			<div class="tech__block">
-				<h3>Saha Ekipmanları</h3>
-				<ul class="tech__equipment">
-					{
-						equipment.map((e) => (
-							<li>
-								<Icon name={e.icon} class="tech__icon" />
-								<span>{e.label}</span>
-							</li>
-						))
-					}
-				</ul>
+			<div class="tech__visual">
+				<SiteImage mediaKey="home-technology-detail" sizes="(max-width: 900px) 100vw, 40vw" />
 			</div>
 
-			<div class="tech__block">
-				<h3>Kullandığımız Yazılımlar</h3>
-				<ul class="tech__software">
-					{software.map((s) => <li>{s}</li>)}
-				</ul>
-				<p class="tech__note">Ofis ve raporlama yazılımları ile teknik veri düzenleme ve CAD/GIS çözümleri.</p>
+			<div class="tech__content">
+				<div class="tech__block">
+					<h3>Saha Ekipmanları</h3>
+					<ul class="tech__equipment">
+						{
+							equipment.map((e) => (
+								<li>
+									<Icon name={e.icon} class="tech__icon" />
+									<span>{e.label}</span>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+
+				<div class="tech__block">
+					<h3>Kullandığımız Yazılımlar</h3>
+					<ul class="tech__software">
+						{software.map((s) => <li>{s}</li>)}
+					</ul>
+					<p class="tech__note">Ofis ve raporlama yazılımları ile teknik veri düzenleme ve CAD/GIS çözümleri.</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -53,7 +60,22 @@ const software = ['Netcad', 'AutoCAD', 'Civil 3D', 'ArcGIS', 'QGIS', 'Pix4D', 'A
 <style>
 	.tech__layout {
 		display: grid;
-		grid-template-columns: 1.2fr 0.8fr;
+		grid-template-columns: 0.85fr 1.15fr;
+		gap: 2.5rem;
+		align-items: start;
+	}
+
+	.tech__visual {
+		aspect-ratio: 4/3;
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		position: sticky;
+		top: 110px;
+	}
+
+	.tech__content {
+		display: flex;
+		flex-direction: column;
 		gap: 2.5rem;
 	}
 
@@ -115,6 +137,11 @@ const software = ['Netcad', 'AutoCAD', 'Civil 3D', 'ArcGIS', 'QGIS', 'Pix4D', 'A
 		.tech__layout {
 			grid-template-columns: 1fr;
 			gap: 2rem;
+		}
+
+		.tech__visual {
+			position: static;
+			max-height: 320px;
 		}
 	}
 

@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import TechnicalPlaceholder from '../../components/TechnicalPlaceholder.astro';
+import SiteImage from '../../components/SiteImage.astro';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
 	(a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
@@ -20,7 +21,11 @@ const dateFormatter = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 
 			<Breadcrumb items={[{ label: 'Ana Sayfa', href: '/' }, { label: 'Bilgi Merkezi' }]} />
 		</div>
 
-		<section class="bm-hero bg-grid-dark">
+		<section class="bm-hero">
+			<div class="bm-hero__photo" aria-hidden="true">
+				<SiteImage mediaKey="knowledge-center-cover" priority sizes="100vw" />
+			</div>
+			<div class="bm-hero__overlay" aria-hidden="true"></div>
 			<div class="container bm-hero__inner">
 				<p class="eyebrow eyebrow--light">Bilgi Merkezi</p>
 				<h1>Harita mühendisliği süreçleri hakkında güncel yazılar</h1>
@@ -37,7 +42,7 @@ const dateFormatter = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 
 					articles.map((article) => (
 						<a href={`/bilgi-merkezi/${article.id}`} class="bm-card">
 							<div class="bm-card__visual">
-								<TechnicalPlaceholder variant="contour" showBadge={false} />
+								<TechnicalPlaceholder variant="contour" />
 							</div>
 							<div class="bm-card__body">
 								<span class="bm-card__category">{article.data.category}</span>
@@ -60,12 +65,34 @@ const dateFormatter = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 
 
 <style>
 	.bm-hero {
+		position: relative;
 		background: var(--color-charcoal);
 		color: var(--color-warm-white);
 		padding-block: clamp(3rem, 7vw, 5rem);
+		overflow: hidden;
+	}
+
+	.bm-hero__photo {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+	}
+
+	.bm-hero__overlay {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		background: linear-gradient(
+			100deg,
+			rgba(20, 24, 27, 0.94) 0%,
+			rgba(20, 24, 27, 0.85) 38%,
+			rgba(20, 24, 27, 0.45) 100%
+		);
 	}
 
 	.bm-hero__inner {
+		position: relative;
+		z-index: 2;
 		max-width: 700px;
 	}
 

@@ -2,7 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import Icon from '../components/Icon.astro';
+import SiteImage from '../components/SiteImage.astro';
 import { company } from '../data/company';
+
+const photoShowcase = [
+	{ mediaKey: 'technology-gnss', title: 'GNSS / RTK Ölçüm' },
+	{ mediaKey: 'technology-total-station', title: 'Total Station Ölçümü' },
+	{ mediaKey: 'technology-cad-gis', title: 'CAD / GIS Veri İşleme' },
+];
 
 const fieldSystems = [
 	{ icon: 'satellite', title: 'GNSS / RTK', desc: 'Uydu tabanlı hassas konum belirleme sistemleri.' },
@@ -49,6 +56,21 @@ const qualitySteps = [
 					Projenin ihtiyacına ve saha koşullarına göre uygun ölçüm yöntemi ve teknik altyapı
 					belirlenir.
 				</p>
+			</div>
+		</section>
+
+		<section class="tek-showcase">
+			<div class="container tek-showcase__grid">
+				{
+					photoShowcase.map((item) => (
+						<figure class="tek-showcase__item">
+							<div class="tek-showcase__visual">
+								<SiteImage mediaKey={item.mediaKey} sizes="(max-width: 900px) 100vw, 33vw" />
+							</div>
+							<figcaption>{item.title}</figcaption>
+						</figure>
+					))
+				}
 			</div>
 		</section>
 
@@ -152,6 +174,35 @@ const qualitySteps = [
 		font-size: 1.05rem;
 		line-height: 1.7;
 		color: var(--text-body);
+	}
+
+	.tek-showcase {
+		padding-block: clamp(2.5rem, 5vw, 3.5rem);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.tek-showcase__grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.5rem;
+	}
+
+	.tek-showcase__item {
+		margin: 0;
+	}
+
+	.tek-showcase__visual {
+		aspect-ratio: 1/1;
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+	}
+
+	.tek-showcase__item figcaption {
+		margin-top: 0.9rem;
+		font-size: 0.92rem;
+		font-weight: 700;
+		color: var(--text-heading);
+		text-align: center;
 	}
 
 	.tek-section {
@@ -289,11 +340,16 @@ const qualitySteps = [
 		.quality-list {
 			grid-template-columns: 1fr 1fr;
 		}
+
+		.tek-showcase__grid {
+			grid-template-columns: 1fr 1fr;
+		}
 	}
 
 	@media (max-width: 560px) {
 		.tek-grid,
-		.quality-list {
+		.quality-list,
+		.tek-showcase__grid {
 			grid-template-columns: 1fr;
 		}
 

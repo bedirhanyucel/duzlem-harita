@@ -4,18 +4,10 @@ import Icon from './Icon.astro';
 interface Props {
 	variant?: 'contour' | 'grid' | 'parcel' | 'coordinate';
 	icon?: string;
-	label?: string;
 	class?: string;
-	showBadge?: boolean;
 }
 
-const {
-	variant = 'contour',
-	icon,
-	label,
-	class: className = '',
-	showBadge = true,
-} = Astro.props;
+const { variant = 'contour', icon, class: className = '' } = Astro.props;
 ---
 
 <div class={`tech-placeholder tech-placeholder--${variant} ${className}`}>
@@ -71,12 +63,6 @@ const {
 			<span class="tech-placeholder__icon">
 				<Icon name={icon} />
 			</span>
-		)
-	}
-
-	{
-		label && showBadge && (
-			<span class="tech-placeholder__badge">{label}</span>
 		)
 	}
 </div>
@@ -154,17 +140,4 @@ const {
 		height: 100%;
 	}
 
-	.tech-placeholder__badge {
-		position: absolute;
-		bottom: 0.75rem;
-		right: 0.75rem;
-		font-size: 0.68rem;
-		font-weight: 700;
-		letter-spacing: 0.03em;
-		color: rgba(246, 243, 238, 0.75);
-		background: rgba(20, 24, 27, 0.55);
-		border: 1px solid rgba(246, 243, 238, 0.2);
-		padding: 0.25rem 0.6rem;
-		border-radius: 999px;
-	}
 </style>

@@ -4,6 +4,7 @@ import Breadcrumb from '../components/Breadcrumb.astro';
 import Icon from '../components/Icon.astro';
 import { company } from '../data/company';
 import { aboutPageSchema } from '../lib/schema';
+import SiteImage from '../components/SiteImage.astro';
 
 const approach = [
 	{ title: 'İhtiyacı Doğru Anlamak', desc: 'Projenin amacı, arazi koşulları ve beklenen sonuç birlikte değerlendirilir.' },
@@ -66,9 +67,9 @@ const processSteps = [
 		</section>
 
 		<section class="corp-section">
-			<div class="container corp-section__narrow">
-				<h2>Araziden uygulamaya uzanan bütüncül bir çalışma yapısı</h2>
+			<div class="container corp-workspace">
 				<div class="corp-prose">
+					<h2>Araziden uygulamaya uzanan bütüncül bir çalışma yapısı</h2>
 					<p>
 						DüzlemSa Harita, Gaziantep merkezli bir harita mühendisliği ofisidir. Parsel,
 						kadastro, imar, inşaat, altyapı ve teknik harita üretimi süreçlerinde proje özelinde
@@ -83,6 +84,9 @@ const processSteps = [
 						Gerektiğinde mimari çözüm ortakları ve hukuki danışmanlık ağıyla koordinasyon
 						sağlanarak farklı disiplinlerin daha düzenli ilerlemesi hedeflenir.
 					</p>
+				</div>
+				<div class="corp-workspace__visual">
+					<SiteImage mediaKey="corporate-technical-workspace" sizes="(max-width: 900px) 100vw, 40vw" />
 				</div>
 			</div>
 		</section>
@@ -282,6 +286,19 @@ const processSteps = [
 
 	.corp-section__narrow {
 		max-width: 72ch;
+	}
+
+	.corp-workspace {
+		display: grid;
+		grid-template-columns: 1.1fr 0.9fr;
+		gap: 3rem;
+		align-items: center;
+	}
+
+	.corp-workspace__visual {
+		aspect-ratio: 4/3;
+		border-radius: var(--radius-lg);
+		overflow: hidden;
 	}
 
 	.corp-prose {
@@ -533,6 +550,15 @@ const processSteps = [
 		.corp-hero__visual {
 			max-width: 180px;
 			order: -1;
+		}
+
+		.corp-workspace {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+
+		.corp-workspace__visual {
+			max-height: 280px;
 		}
 
 		.network-grid {

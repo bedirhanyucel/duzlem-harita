@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import Icon from '../../components/Icon.astro';
 import TechnicalPlaceholder from '../../components/TechnicalPlaceholder.astro';
+import SiteImage from '../../components/SiteImage.astro';
 import { company } from '../../data/company';
 
 const publishedProjects = (await getCollection('projects', ({ data }) => data.published)).sort(
@@ -12,22 +13,19 @@ const publishedProjects = (await getCollection('projects', ({ data }) => data.pu
 
 const workAreas = [
 	{
-		icon: 'building',
+		mediaKey: 'project-surveying',
 		title: 'Endüstriyel Tesis ve Saha Ölçümleri',
 		desc: 'Endüstriyel alanlarda hassas ölçüm ve teknik veri üretimi kapsamındaki çalışma alanı.',
-		variant: 'grid' as const,
 	},
 	{
-		icon: 'crane',
+		mediaKey: 'project-construction',
 		title: 'Yapı Aplikasyonu ve Şantiye Uygulamaları',
 		desc: 'İnşaat süreçlerinde aplikasyon ve saha kontrol ölçümlerini kapsayan çalışma alanı.',
-		variant: 'coordinate' as const,
 	},
 	{
-		icon: 'layers',
+		mediaKey: 'project-parcel',
 		title: 'Parsel, Kadastro ve İmar Süreçleri',
 		desc: 'Parsel düzenleme ve imar uygulamalarına yönelik teknik çalışma alanı.',
-		variant: 'parcel' as const,
 	},
 ];
 ---
@@ -41,7 +39,11 @@ const workAreas = [
 			<Breadcrumb items={[{ label: 'Ana Sayfa', href: '/' }, { label: 'Projeler' }]} />
 		</div>
 
-		<section class="projeler-hero bg-grid-dark">
+		<section class="projeler-hero">
+			<div class="projeler-hero__photo" aria-hidden="true">
+				<SiteImage mediaKey="projects-cover" priority sizes="100vw" />
+			</div>
+			<div class="projeler-hero__overlay" aria-hidden="true"></div>
 			<div class="container projeler-hero__inner">
 				<p class="eyebrow eyebrow--light">Projeler ve Çalışma Alanları</p>
 				<h1>Farklı ölçeklerde teknik ölçüm ve uygulama deneyimi</h1>
@@ -61,7 +63,7 @@ const workAreas = [
 							{publishedProjects.map((project) => (
 								<a href={`/projeler/${project.id}`} class="project-tile">
 									<div class="project-tile__visual">
-										<TechnicalPlaceholder variant="grid" icon="compass" showBadge={project.data.representative} label="Temsili görsel" />
+										<TechnicalPlaceholder variant="grid" icon="compass" />
 									</div>
 									<div class="project-tile__body">
 										<span class="project-tile__category">{project.data.category}</span>
@@ -88,7 +90,7 @@ const workAreas = [
 						workAreas.map((area) => (
 							<article class="workarea-card">
 								<div class="workarea-card__visual">
-									<TechnicalPlaceholder variant={area.variant} icon={area.icon} showBadge={false} />
+									<SiteImage mediaKey={area.mediaKey} sizes="(max-width: 900px) 100vw, 33vw" />
 								</div>
 								<div class="workarea-card__body">
 									<span class="workarea-card__label">Çalışma Alanı</span>
@@ -124,12 +126,34 @@ const workAreas = [
 
 <style>
 	.projeler-hero {
+		position: relative;
 		background: var(--color-charcoal);
 		color: var(--color-warm-white);
 		padding-block: clamp(3rem, 7vw, 5rem);
+		overflow: hidden;
+	}
+
+	.projeler-hero__photo {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+	}
+
+	.projeler-hero__overlay {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		background: linear-gradient(
+			100deg,
+			rgba(20, 24, 27, 0.94) 0%,
+			rgba(20, 24, 27, 0.85) 38%,
+			rgba(20, 24, 27, 0.45) 100%
+		);
 	}
 
 	.projeler-hero__inner {
+		position: relative;
+		z-index: 2;
 		max-width: 700px;
 	}
 
@@ -222,6 +246,11 @@ const workAreas = [
 		border-radius: var(--radius-lg);
 		overflow: hidden;
 		background: var(--bg-page);
+		transition: border-color 0.15s ease;
+	}
+
+	.workarea-card:hover {
+		border-color: var(--color-primary);
 	}
 
 	.workarea-card__visual {
