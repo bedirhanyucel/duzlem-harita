@@ -7,18 +7,21 @@ const services = [
 		title: 'Parsel Sınır Tespiti ve Aplikasyon',
 		desc: 'Arsa ve tarla sınırlarının teknik olarak belirlenmesi, köşe noktalarının tespiti ve aplikasyon işlemlerinin güvenilir şekilde yürütülmesi.',
 		items: ['Sınır ve köşe noktası tespiti', 'Yer gösterme', 'Aplikasyon'],
+		href: '/hizmetler/parsel-sinir-tespiti-aplikasyon',
 	},
 	{
 		icon: 'building',
 		title: 'Plankote, Yapı Aplikasyonu ve Şantiye Ölçümleri',
 		desc: 'Mimari ve inşaat projeleri için plankote, temel aplikasyonu, kot kontrolleri ve şantiye ölçümlerinin hassas şekilde gerçekleştirilmesi.',
 		items: ['Temel ve aks aplikasyonu', 'Kot kontrolleri', 'As-built ölçümleri'],
+		href: '/hizmetler/yapi-aplikasyonu-santiye-olcumleri',
 	},
 	{
 		icon: 'layers',
 		title: 'İfraz, Tevhit ve İmar Uygulamaları',
 		desc: 'Parsel düzenleme, ifraz, tevhit, yola terk ve teknik imar süreçlerinin proje ihtiyaçlarına uygun şekilde yönetilmesi.',
 		items: ['İfraz ve tevhit', 'Yola terk / yoldan ihdas', 'İmar uygulamaları'],
+		href: '/hizmetler/ifraz-tevhit',
 	},
 ];
 ---
@@ -47,8 +50,8 @@ const services = [
 								</li>
 							))}
 						</ul>
-						<a href="#iletisim" class="service-card__link">
-							Teklif Al <Icon name="arrow-right" class="icon-xs" />
+						<a href={s.href} class="service-card__link">
+							Detaylı Bilgi <Icon name="arrow-right" class="icon-xs" />
 						</a>
 					</article>
 				))

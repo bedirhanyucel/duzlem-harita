@@ -1,0 +1,97 @@
+---
+interface Props {
+	items: { q: string; a: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="faq-list">
+	{
+		items.map((item) => (
+			<details class="faq-list__item">
+				<summary>
+					{item.q}
+					<span class="faq-list__toggle" aria-hidden="true" />
+				</summary>
+				<p>{item.a}</p>
+			</details>
+		))
+	}
+</div>
+
+<style>
+	.faq-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.faq-list__item {
+		background: var(--bg-page);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		padding: 1.1rem 1.4rem;
+	}
+
+	.faq-list__item summary {
+		cursor: pointer;
+		font-weight: 700;
+		font-size: 0.98rem;
+		color: var(--text-heading);
+		list-style: none;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.faq-list__item summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.faq-list__toggle {
+		flex-shrink: 0;
+		width: 20px;
+		height: 20px;
+		position: relative;
+	}
+
+	.faq-list__toggle::before,
+	.faq-list__toggle::after {
+		content: '';
+		position: absolute;
+		background: var(--color-primary);
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	.faq-list__toggle::before {
+		width: 12px;
+		height: 2px;
+	}
+
+	.faq-list__toggle::after {
+		width: 2px;
+		height: 12px;
+		transition: opacity 0.15s ease;
+	}
+
+	.faq-list__item[open] .faq-list__toggle::after {
+		opacity: 0;
+	}
+
+	.faq-list__item p {
+		margin-top: 0.9rem;
+		font-size: 0.92rem;
+		line-height: 1.65;
+		color: var(--text-body);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.faq-list__toggle::after {
+			transition: none;
+		}
+	}
+</style>

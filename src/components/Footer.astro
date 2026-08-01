@@ -6,19 +6,20 @@ const year = new Date().getFullYear();
 
 const quickLinks = [
 	{ label: 'Ana Sayfa', href: '/' },
-	{ label: 'Hizmetler', href: '#hizmetler' },
-	{ label: 'Projeler', href: '#projeler' },
-	{ label: 'Kurumsal', href: '#kurumsal' },
-	{ label: 'Teknoloji', href: '#teknoloji' },
-	{ label: 'SSS', href: '#sss' },
+	{ label: 'Hizmetler', href: '/hizmetler' },
+	{ label: 'Projeler', href: '/#projeler' },
+	{ label: 'Kurumsal', href: '/#kurumsal' },
+	{ label: 'Teknoloji', href: '/#teknoloji' },
+	{ label: 'SSS', href: '/#sss' },
 ];
 
 const serviceLinks = [
-	'Kadastro ve Parsel İşlemleri',
-	'İmar ve Parsel Düzenleme Hizmetleri',
-	'İnşaat ve Şantiye Haritacılığı',
-	'Harita Üretimi ve Sayısal Veri',
-	'İleri Teknoloji ve Proje Destekleri',
+	{ label: 'Parsel Sınır Tespiti', href: '/hizmetler/parsel-sinir-tespiti-aplikasyon' },
+	{ label: 'Plankote', href: '/hizmetler/plankote' },
+	{ label: 'Şantiye Ölçümleri', href: '/hizmetler/yapi-aplikasyonu-santiye-olcumleri' },
+	{ label: 'İfraz ve Tevhit', href: '/hizmetler/ifraz-tevhit' },
+	{ label: 'İmar Uygulamaları', href: '/hizmetler/imar-uygulamalari' },
+	{ label: 'Tüm Hizmetler', href: '/hizmetler' },
 ];
 ---
 
@@ -48,7 +49,7 @@ const serviceLinks = [
 		<div class="footer-col">
 			<h3>Hizmet Alanlarımız</h3>
 			<ul>
-				{serviceLinks.map((label) => <li><a href="#hizmetler">{label}</a></li>)}
+				{serviceLinks.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
 			</ul>
 		</div>
 

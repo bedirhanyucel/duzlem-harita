@@ -1,14 +1,21 @@
 ---
 import Icon from './Icon.astro';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = 'Projenizin teknik kapsamını birlikte değerlendirelim.',
+	description = 'Parsel, imar veya şantiye sürecinizle ilgili ihtiyacınızı iletin; size en uygun teknik yaklaşımı birlikte belirleyelim.',
+} = Astro.props;
 ---
 
 <section class="cta bg-grid-dark" id="iletisim">
 	<div class="container cta__inner">
-		<h2>Projenizin teknik kapsamını birlikte değerlendirelim.</h2>
-		<p>
-			Parsel, imar veya şantiye sürecinizle ilgili ihtiyacınızı iletin; size en uygun teknik
-			yaklaşımı birlikte belirleyelim.
-		</p>
+		<h2>{title}</h2>
+		<p>{description}</p>
 
 		<div class="cta__actions">
 			<a href="mailto:duzlemsaharita@gmail.com" class="btn btn-primary">

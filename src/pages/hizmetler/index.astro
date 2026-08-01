@@ -1,0 +1,146 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import MainServices from '../../components/MainServices.astro';
+import CategorySection from '../../components/CategorySection.astro';
+import { serviceCategories } from '../../data/serviceCategories';
+
+const allServices = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout
+	title="Harita Mühendisliği Hizmetleri | DüzlemSa Harita"
+	description="Gaziantep'te aplikasyon, plankote, şantiye ölçümleri, ifraz, tevhit, imar uygulamaları, halihazır harita ve teknik ölçüm hizmetleri."
+>
+	<main>
+		<section class="hizmetler-hero bg-grid-dark">
+			<div class="container hizmetler-hero__inner">
+				<p class="eyebrow eyebrow--light">DüzlemSa Harita Hizmetleri</p>
+				<h1>Araziden projeye uzanan kapsamlı mühendislik çözümleri</h1>
+				<p class="hizmetler-hero__desc">
+					Kadastro, imar, inşaat, altyapı ve mekânsal veri süreçlerinde projenin ihtiyacına
+					uygun ölçüm ve teknik uygulama hizmetleri sunuyoruz.
+				</p>
+				<div class="hizmetler-hero__actions">
+					<a href="/#iletisim" class="btn btn-primary">Projenizi Anlatın</a>
+					<a
+						href="https://wa.me/905388751998"
+						target="_blank"
+						rel="noopener"
+						class="btn btn-outline-light"
+					>
+						WhatsApp'tan Bilgi Alın
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<MainServices />
+
+		{
+			serviceCategories.map((category) => (
+				<CategorySection
+					category={category}
+					services={allServices.filter((s) => s.data.category === category.id)}
+				/>
+			))
+		}
+
+		<section class="finder-cta">
+			<div class="container">
+				<div class="finder-cta__box">
+					<h2>Hangi hizmete ihtiyacınız olduğundan emin değil misiniz?</h2>
+					<p>
+						Ada-parsel bilgisi, proje konumu veya kısa bir ihtiyaç açıklaması paylaşın. Teknik
+						kapsamı birlikte değerlendirelim.
+					</p>
+					<div class="finder-cta__actions">
+						<a href="/#iletisim" class="btn btn-primary">Teklif ve Bilgi Talebi</a>
+						<a
+							href="https://wa.me/905388751998"
+							target="_blank"
+							rel="noopener"
+							class="btn btn-outline"
+						>
+							WhatsApp
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.hizmetler-hero {
+		background: var(--color-charcoal);
+		color: var(--color-warm-white);
+		padding-block: clamp(3rem, 7vw, 5rem);
+	}
+
+	.hizmetler-hero__inner {
+		max-width: 700px;
+	}
+
+	.eyebrow--light {
+		color: var(--color-accent-olive);
+	}
+
+	.eyebrow--light::before {
+		background: var(--color-accent-olive);
+	}
+
+	.hizmetler-hero h1 {
+		color: var(--color-warm-white);
+	}
+
+	.hizmetler-hero__desc {
+		margin-top: 1.25rem;
+		font-size: 1.05rem;
+		line-height: 1.7;
+		color: rgba(246, 243, 238, 0.8);
+		max-width: 60ch;
+	}
+
+	.hizmetler-hero__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-top: 2rem;
+	}
+
+	.finder-cta {
+		padding-block: clamp(3rem, 6vw, 5rem);
+	}
+
+	.finder-cta__box {
+		text-align: center;
+		max-width: 640px;
+		margin-inline: auto;
+		padding: clamp(2rem, 5vw, 3rem);
+		background: var(--bg-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+	}
+
+	.finder-cta__box p {
+		margin-top: 1rem;
+		color: var(--text-body);
+		line-height: 1.7;
+	}
+
+	.finder-cta__actions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1rem;
+		margin-top: 1.75rem;
+	}
+
+	@media (max-width: 640px) {
+		.hizmetler-hero__actions .btn,
+		.finder-cta__actions .btn {
+			width: 100%;
+		}
+	}
+</style>

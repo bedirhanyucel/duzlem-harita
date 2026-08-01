@@ -1,0 +1,92 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+	href: string;
+	icon: string;
+	title: string;
+	summary: string;
+}
+
+const { href, icon, title, summary } = Astro.props;
+---
+
+<a href={href} class="service-card-sm">
+	<span class="service-card-sm__icon">
+		<Icon name={icon} />
+	</span>
+	<span class="service-card-sm__body">
+		<span class="service-card-sm__title">{title}</span>
+		<span class="service-card-sm__summary">{summary}</span>
+	</span>
+	<Icon name="arrow-right" class="service-card-sm__arrow" />
+</a>
+
+<style>
+	.service-card-sm {
+		display: flex;
+		align-items: flex-start;
+		gap: 1rem;
+		padding: 1.35rem;
+		background: var(--bg-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		transition: border-color 0.15s ease, box-shadow 0.15s ease;
+	}
+
+	.service-card-sm:hover {
+		border-color: var(--color-primary);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.service-card-sm:hover .service-card-sm__arrow {
+		transform: translateX(3px);
+	}
+
+	.service-card-sm__icon {
+		flex-shrink: 0;
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--radius-sm);
+		background: var(--color-warm-white);
+		color: var(--color-primary);
+	}
+
+	.service-card-sm__icon :global(svg) {
+		width: 20px;
+		height: 20px;
+	}
+
+	.service-card-sm__body {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		flex: 1;
+	}
+
+	.service-card-sm__title {
+		font-weight: 700;
+		font-size: 0.95rem;
+		color: var(--text-heading);
+		line-height: 1.35;
+	}
+
+	.service-card-sm__summary {
+		font-size: 0.84rem;
+		color: var(--text-body);
+		line-height: 1.5;
+	}
+
+	.service-card-sm :global(.service-card-sm__arrow) {
+		flex-shrink: 0;
+		width: 16px;
+		height: 16px;
+		margin-top: 0.6rem;
+		color: var(--color-primary);
+		transition: transform 0.15s ease;
+	}
+</style>

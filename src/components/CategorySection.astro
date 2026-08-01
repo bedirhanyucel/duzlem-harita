@@ -1,0 +1,100 @@
+---
+import Icon from './Icon.astro';
+import ServiceCard from './ServiceCard.astro';
+import type { ServiceCategory } from '../data/serviceCategories';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	category: ServiceCategory;
+	services: CollectionEntry<'services'>[];
+}
+
+const { category, services } = Astro.props;
+---
+
+<section class="category-section" id={category.id}>
+	<div class="container">
+		<div class="category-section__head">
+			<span class="category-section__icon">
+				<Icon name={category.icon} />
+			</span>
+			<div>
+				<h2>{category.title}</h2>
+				<p>{category.description}</p>
+			</div>
+		</div>
+
+		<div class="category-section__grid">
+			{
+				services.map((service) => (
+					<ServiceCard
+						href={`/hizmetler/${service.id}`}
+						icon={service.data.icon}
+						title={service.data.shortTitle}
+						summary={service.data.summary}
+					/>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.category-section {
+		padding-block: clamp(2.5rem, 5vw, 3.5rem);
+		scroll-margin-top: 100px;
+	}
+
+	.category-section:nth-of-type(even) {
+		background: var(--bg-surface);
+		border-block: 1px solid var(--color-border);
+	}
+
+	.category-section__head {
+		display: flex;
+		align-items: flex-start;
+		gap: 1.1rem;
+		max-width: 640px;
+		margin-bottom: 2rem;
+	}
+
+	.category-section__icon {
+		flex-shrink: 0;
+		width: 52px;
+		height: 52px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--radius-md);
+		background: var(--color-primary);
+		color: var(--color-warm-white);
+	}
+
+	.category-section__icon :global(svg) {
+		width: 26px;
+		height: 26px;
+	}
+
+	.category-section__head h2 {
+		font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+		margin-bottom: 0.4rem;
+	}
+
+	.category-section__head p {
+		font-size: 0.95rem;
+		color: var(--text-body);
+		line-height: 1.6;
+	}
+
+	.category-section__grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+	}
+
+	@media (max-width: 700px) {
+		.category-section__grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

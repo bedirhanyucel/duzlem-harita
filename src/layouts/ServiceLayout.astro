@@ -1,0 +1,445 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from './Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Icon from '../components/Icon.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import FAQList from '../components/FAQList.astro';
+import FinalCTA from '../components/FinalCTA.astro';
+import { serviceCategories } from '../data/serviceCategories';
+
+interface Props {
+	entry: CollectionEntry<'services'>;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const category = serviceCategories.find((c) => c.id === data.category)!;
+
+const allServices = await getCollection('services');
+
+const relatedEntries = data.relatedServices
+	? data.relatedServices
+			.map((slug) => allServices.find((s) => s.id === slug))
+			.filter((s): s is CollectionEntry<'services'> => Boolean(s))
+	: allServices
+			.filter((s) => s.id !== entry.id && s.data.category === data.category)
+			.sort((a, b) => a.data.order - b.data.order);
+
+const related = relatedEntries.slice(0, 3);
+
+const defaultProcessSteps = [
+	{ title: 'İhtiyaç ve Belge İncelemesi', desc: 'Mevcut belgeler ve proje ihtiyacı değerlendirilir.' },
+	{ title: 'Teknik Kapsamın Belirlenmesi', desc: 'Uygulanacak yöntem ve zaman planı netleştirilir.' },
+	{ title: 'Saha Ölçümü', desc: 'Ölçüm çalışması güncel ekipmanlarla gerçekleştirilir.' },
+	{ title: 'Ofis Çalışması ve Kalite Kontrol', desc: 'Veriler işlenir ve teknik kontrolden geçirilir.' },
+	{ title: 'Teknik Çıktıların Teslimi', desc: 'Sonuçlar kullanılabilir formatta teslim edilir.' },
+];
+
+const processSteps = data.processSteps ?? defaultProcessSteps;
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'Service',
+	name: data.title,
+	description: data.seoDescription,
+	areaServed: 'Gaziantep, Türkiye',
+	provider: {
+		'@type': 'ProfessionalService',
+		name: 'DuzlemSa',
+		areaServed: 'Gaziantep',
+	},
+};
+---
+
+<Layout title={data.seoTitle} description={data.seoDescription}>
+	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+	<main>
+		<div class="container">
+			<Breadcrumb
+				items={[
+					{ label: 'Ana Sayfa', href: '/' },
+					{ label: 'Hizmetler', href: '/hizmetler' },
+					{ label: data.shortTitle },
+				]}
+			/>
+		</div>
+
+		<section class="service-hero bg-grid">
+			<div class="container service-hero__inner">
+				<div class="service-hero__text">
+					<p class="eyebrow">{data.heroLabel}</p>
+					<h1>{data.title}</h1>
+					<p class="service-hero__intro">{data.intro}</p>
+					<div class="service-hero__actions">
+						<a href="#son-cta" class="btn btn-primary">Teklif Al</a>
+						<a
+							href="https://wa.me/905388751998"
+							target="_blank"
+							rel="noopener"
+							class="btn btn-outline"
+						>
+							WhatsApp'tan Sorun
+						</a>
+					</div>
+				</div>
+				<div class="service-hero__visual" aria-hidden="true">
+					<Icon name={data.icon} />
+				</div>
+			</div>
+		</section>
+
+		<section class="service-section">
+			<div class="container service-section__narrow">
+				<h2>Hizmet Hakkında</h2>
+				<div class="service-prose">
+					<Content />
+				</div>
+			</div>
+		</section>
+
+		<section class="service-section section--alt">
+			<div class="container">
+				<h2>Hizmet kapsamında neler var?</h2>
+				<ul class="service-scope">
+					{
+						data.servicesIncluded.map((item) => (
+							<li>
+								<Icon name="check" class="icon-xs" />
+								<span>{item}</span>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</section>
+
+		<section class="service-section">
+			<div class="container">
+				<h2>Kimler için uygundur?</h2>
+				<div class="service-audience">
+					{
+						data.whoNeedsIt.map((item) => (
+							<div class="service-audience__card">
+								<h3>{item.title}</h3>
+								<p>{item.desc}</p>
+							</div>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="service-section section--alt">
+			<div class="container">
+				<h2>Süreç nasıl ilerler?</h2>
+				<ol class="service-process">
+					{
+						processSteps.map((step, i) => (
+							<li>
+								<span class="service-process__num">{String(i + 1).padStart(2, '0')}</span>
+								<h3>{step.title}</h3>
+								<p>{step.desc}</p>
+							</li>
+						))
+					}
+				</ol>
+			</div>
+		</section>
+
+		<section class="service-section">
+			<div class="container service-info-grid">
+				<div>
+					<h2>Müşteriden istenebilecek bilgiler</h2>
+					<p class="service-info-lead">
+						Sürecin hızlı ilerlemesi için aşağıdaki bilgilerden ilgili olanları paylaşmanız
+						yeterlidir.
+					</p>
+					<ul class="service-checklist">
+						{data.requiredInformation.map((item) => <li>{item}</li>)}
+					</ul>
+				</div>
+				<div>
+					<h2>Teslim edilebilecek çıktılar</h2>
+					<p class="service-info-lead">
+						Aşağıdaki çıktılar proje kapsamına göre sağlanabilir.
+					</p>
+					<ul class="service-checklist">
+						{data.deliverables.map((item) => <li>{item}</li>)}
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<section class="service-section section--alt">
+			<div class="container">
+				<h2>Sıkça sorulan sorular</h2>
+				<div class="service-faq">
+					<FAQList items={data.faq} />
+				</div>
+			</div>
+		</section>
+
+		{
+			related.length > 0 && (
+				<section class="service-section">
+					<div class="container">
+						<h2>İlgili hizmetler</h2>
+						<div class="service-related">
+							{related.map((r) => (
+								<ServiceCard
+									href={`/hizmetler/${r.id}`}
+									icon={r.data.icon}
+									title={r.data.shortTitle}
+									summary={r.data.summary}
+								/>
+							))}
+						</div>
+					</div>
+				</section>
+			)
+		}
+
+		<div id="son-cta">
+			<FinalCTA
+				title="Bu hizmet için teknik değerlendirme alın"
+				description="Proje konumu ve kısa çalışma açıklamasını iletin. İhtiyacınıza uygun kapsamı birlikte belirleyelim."
+			/>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.service-hero {
+		padding-block: clamp(2.5rem, 6vw, 4rem);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.service-hero__inner {
+		display: grid;
+		grid-template-columns: 1.3fr 0.7fr;
+		gap: 3rem;
+		align-items: center;
+	}
+
+	.service-hero__intro {
+		margin-top: 1.25rem;
+		font-size: 1.05rem;
+		line-height: 1.7;
+		color: var(--text-body);
+		max-width: 60ch;
+	}
+
+	.service-hero__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-top: 2rem;
+	}
+
+	.service-hero__visual {
+		aspect-ratio: 1;
+		max-width: 220px;
+		margin-inline: auto;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--radius-lg);
+		background: var(--color-charcoal);
+		color: var(--color-accent-olive);
+	}
+
+	.service-hero__visual :global(svg) {
+		width: 40%;
+		height: 40%;
+	}
+
+	.service-section {
+		padding-block: clamp(2.75rem, 5vw, 4rem);
+	}
+
+	.service-section h2 {
+		margin-bottom: 1.5rem;
+	}
+
+	.service-section__narrow {
+		max-width: 72ch;
+	}
+
+	.service-prose {
+		display: flex;
+		flex-direction: column;
+		gap: 1.1rem;
+		font-size: 1.02rem;
+		line-height: 1.8;
+		color: var(--text-body);
+	}
+
+	.service-prose :global(p) {
+		margin: 0;
+	}
+
+	.service-scope {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.9rem 2rem;
+		max-width: 900px;
+	}
+
+	.service-scope li {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.6rem;
+		font-size: 0.96rem;
+		color: var(--text-heading);
+	}
+
+	.service-scope :global(.icon-xs) {
+		width: 17px;
+		height: 17px;
+		margin-top: 0.2rem;
+		color: var(--color-accent-olive);
+		flex-shrink: 0;
+	}
+
+	.service-audience {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 1.25rem;
+	}
+
+	.service-audience__card {
+		padding: 1.4rem;
+		background: var(--bg-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+	}
+
+	.service-audience__card h3 {
+		font-size: 1rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.service-audience__card p {
+		font-size: 0.88rem;
+		color: var(--text-body);
+		line-height: 1.6;
+	}
+
+	.service-process {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+		gap: 1.25rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.service-process li {
+		padding: 1.5rem 1.25rem 1.25rem;
+		background: var(--bg-page);
+		border: 1px solid var(--color-border);
+		border-top: 3px solid var(--color-primary);
+		border-radius: var(--radius-md);
+	}
+
+	.service-process__num {
+		display: block;
+		font-size: 1.4rem;
+		font-weight: 800;
+		color: var(--color-soft-gray);
+		margin-bottom: 0.6rem;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.service-process h3 {
+		font-size: 0.96rem;
+		margin-bottom: 0.4rem;
+	}
+
+	.service-process p {
+		font-size: 0.85rem;
+		color: var(--text-body);
+		line-height: 1.55;
+	}
+
+	.service-info-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3rem;
+	}
+
+	.service-info-lead {
+		font-size: 0.9rem;
+		color: var(--text-body);
+		margin-bottom: 1.1rem;
+	}
+
+	.service-checklist {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.service-checklist li {
+		padding-left: 1.1rem;
+		position: relative;
+		font-size: 0.93rem;
+		color: var(--text-heading);
+		line-height: 1.5;
+	}
+
+	.service-checklist li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.5em;
+		width: 6px;
+		height: 6px;
+		background: var(--color-primary);
+	}
+
+	.service-faq {
+		max-width: 800px;
+	}
+
+	.service-related {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+	}
+
+	@media (max-width: 900px) {
+		.service-hero__inner {
+			grid-template-columns: 1fr;
+		}
+
+		.service-hero__visual {
+			max-width: 140px;
+			order: -1;
+		}
+
+		.service-info-grid {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+
+		.service-related {
+			grid-template-columns: 1fr;
+		}
+
+		.service-scope {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.service-hero__actions .btn {
+			width: 100%;
+		}
+	}
+</style>
