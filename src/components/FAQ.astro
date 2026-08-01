@@ -1,0 +1,126 @@
+---
+const faqs = [
+	{
+		q: 'Parsel sınır tespiti nasıl yapılır?',
+		a: 'Tapu ve kadastro kayıtları incelenerek, saha üzerinde GNSS/RTK veya total station ile ölçüm yapılır; sınır ve köşe noktaları teknik olarak belirlenip aplikasyonu gerçekleştirilir.',
+	},
+	{
+		q: 'Plankote hangi durumlarda gerekir?',
+		a: 'Yapı projelendirme, zemin kotu belirleme ve şantiye planlaması öncesinde arazinin mevcut durumunu gösteren plankote çalışması gerekir.',
+	},
+	{
+		q: 'İfraz ve tevhit işlemleri nedir?',
+		a: 'İfraz, bir parselin birden fazla parçaya ayrılması; tevhit ise birden fazla parselin tek parselde birleştirilmesi işlemidir. Her ikisi de imar mevzuatına uygun teknik dosya ile yürütülür.',
+	},
+	{
+		q: 'Teklif almak için hangi bilgiler gereklidir?',
+		a: 'Parsel/ada bilgisi veya konum, proje türü ve varsa mevcut proje/imar bilgileri ile iletişime geçmeniz yeterlidir. Kapsamı birlikte netleştiririz.',
+	},
+];
+---
+
+<section class="faq section--alt" id="sss">
+	<div class="container faq__layout">
+		<div class="section-head">
+			<p class="eyebrow">SSS</p>
+			<h2>Sıkça sorulan sorular</h2>
+		</div>
+
+		<div class="faq__list">
+			{
+				faqs.map((item) => (
+					<details class="faq__item">
+						<summary>
+							{item.q}
+							<span class="faq__toggle" aria-hidden="true"></span>
+						</summary>
+						<p>{item.a}</p>
+					</details>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.faq__layout {
+		display: grid;
+		grid-template-columns: 0.8fr 1.2fr;
+		gap: 3rem;
+	}
+
+	.faq__list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.faq__item {
+		background: var(--bg-page);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		padding: 1.1rem 1.4rem;
+	}
+
+	.faq__item summary {
+		cursor: pointer;
+		font-weight: 700;
+		font-size: 0.98rem;
+		color: var(--text-heading);
+		list-style: none;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.faq__item summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.faq__toggle {
+		flex-shrink: 0;
+		width: 20px;
+		height: 20px;
+		position: relative;
+	}
+
+	.faq__toggle::before,
+	.faq__toggle::after {
+		content: '';
+		position: absolute;
+		background: var(--color-primary);
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	.faq__toggle::before {
+		width: 12px;
+		height: 2px;
+	}
+
+	.faq__toggle::after {
+		width: 2px;
+		height: 12px;
+		transition: opacity 0.15s ease;
+	}
+
+	.faq__item[open] .faq__toggle::after {
+		opacity: 0;
+	}
+
+	.faq__item p {
+		margin-top: 0.9rem;
+		font-size: 0.92rem;
+		line-height: 1.65;
+		color: var(--text-body);
+	}
+
+	@media (max-width: 900px) {
+		.faq__layout {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+		}
+	}
+</style>

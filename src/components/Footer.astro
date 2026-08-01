@@ -1,0 +1,214 @@
+---
+import Icon from './Icon.astro';
+import logo from '../assets/logo.png';
+
+const year = new Date().getFullYear();
+
+const quickLinks = [
+	{ label: 'Ana Sayfa', href: '/' },
+	{ label: 'Hizmetler', href: '#hizmetler' },
+	{ label: 'Projeler', href: '#projeler' },
+	{ label: 'Kurumsal', href: '#kurumsal' },
+	{ label: 'Teknoloji', href: '#teknoloji' },
+	{ label: 'SSS', href: '#sss' },
+];
+
+const serviceLinks = [
+	'Kadastro ve Parsel İşlemleri',
+	'İmar ve Parsel Düzenleme Hizmetleri',
+	'İnşaat ve Şantiye Haritacılığı',
+	'Harita Üretimi ve Sayısal Veri',
+	'İleri Teknoloji ve Proje Destekleri',
+];
+---
+
+<footer class="site-footer">
+	<div class="container site-footer__grid">
+		<div class="footer-brand">
+			<a href="/" class="footer-brand__logo" aria-label="DüzlemSa Harita anasayfa">
+				<img src={logo.src} width="176" height="103" alt="DüzlemSa Harita" />
+			</a>
+			<p>
+				Gaziantep merkezli DüzlemSa Harita; parsel, kadastro, imar ve şantiye süreçlerinde
+				doğru ölçüm ve güvenilir mühendislik yaklaşımıyla hizmet verir.
+			</p>
+			<a href="https://wa.me/905388751998" class="footer-brand__whatsapp" target="_blank" rel="noopener">
+				<Icon name="chat" class="icon-sm" />
+				WhatsApp'tan Yazın
+			</a>
+		</div>
+
+		<div class="footer-col">
+			<h3>Hızlı Linkler</h3>
+			<ul>
+				{quickLinks.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+			</ul>
+		</div>
+
+		<div class="footer-col">
+			<h3>Hizmet Alanlarımız</h3>
+			<ul>
+				{serviceLinks.map((label) => <li><a href="#hizmetler">{label}</a></li>)}
+			</ul>
+		</div>
+
+		<div class="footer-col">
+			<h3>İletişim</h3>
+			<ul class="footer-contact">
+				<li>
+					<Icon name="mappin" class="icon-sm" />
+					<span>Değirmiçem Mah. Sabahat Göğüş Cad. Anadolu İş Merkezi No: 23/23, Şehitkamil / Gaziantep</span>
+				</li>
+				<li>
+					<Icon name="phone" class="icon-sm" />
+					<a href="tel:+905388751998">+90 538 875 19 98</a>
+				</li>
+				<li>
+					<Icon name="mail" class="icon-sm" />
+					<a href="mailto:duzlemsaharita@gmail.com">duzlemsaharita@gmail.com</a>
+				</li>
+				<li class="footer-region">
+					Gaziantep merkezli, bölgesel hizmet
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="site-footer__bottom">
+		<div class="container site-footer__bottom-inner">
+			<p>&copy; {year} DuzlemSa. Tüm hakları saklıdır.</p>
+			<p class="legal-note">Resmî unvan: DuzlemSa &middot; Süleyman Alperen Hançerkıran</p>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.site-footer {
+		background: var(--color-charcoal);
+		color: rgba(246, 243, 238, 0.75);
+	}
+
+	.site-footer__grid {
+		display: grid;
+		grid-template-columns: 1.6fr 1fr 1.2fr 1.4fr;
+		gap: 2.5rem;
+		padding-block: 4rem 3rem;
+	}
+
+	.footer-brand__logo {
+		display: inline-flex;
+		text-decoration: none;
+		margin-bottom: 1.25rem;
+	}
+
+	.footer-brand__logo img {
+		height: 56px;
+		width: auto;
+	}
+
+	.footer-brand p {
+		font-size: 0.92rem;
+		line-height: 1.7;
+		max-width: 34ch;
+	}
+
+	.footer-brand__whatsapp {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 1.25rem;
+		font-size: 0.88rem;
+		font-weight: 600;
+		color: var(--color-warm-white);
+		text-decoration: none;
+		border: 1px solid rgba(246, 243, 238, 0.25);
+		padding: 0.55rem 1rem;
+		border-radius: var(--radius-sm);
+	}
+
+	.footer-brand__whatsapp:hover {
+		border-color: var(--color-accent-olive);
+		color: var(--color-accent-olive);
+	}
+
+	.footer-col h3 {
+		font-size: 0.85rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--color-warm-white);
+		margin-bottom: 1.1rem;
+		font-weight: 700;
+	}
+
+	.footer-col ul {
+		display: flex;
+		flex-direction: column;
+		gap: 0.65rem;
+	}
+
+	.footer-col a {
+		font-size: 0.9rem;
+		text-decoration: none;
+		color: rgba(246, 243, 238, 0.75);
+	}
+
+	.footer-col a:hover {
+		color: var(--color-accent-olive);
+	}
+
+	.footer-contact li {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.6rem;
+		font-size: 0.88rem;
+		line-height: 1.55;
+	}
+
+	:global(.icon-sm) {
+		width: 17px;
+		height: 17px;
+		flex-shrink: 0;
+		color: var(--color-accent-olive);
+	}
+
+	.footer-contact :global(.icon-sm) {
+		margin-top: 0.15rem;
+	}
+
+	.footer-region {
+		padding-top: 0.25rem;
+		font-style: italic;
+		color: rgba(246, 243, 238, 0.55);
+	}
+
+	.site-footer__bottom {
+		border-top: 1px solid rgba(246, 243, 238, 0.12);
+	}
+
+	.site-footer__bottom-inner {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 0.5rem;
+		padding-block: 1.5rem;
+		font-size: 0.82rem;
+		color: rgba(246, 243, 238, 0.5);
+	}
+
+	.legal-note {
+		color: rgba(246, 243, 238, 0.4);
+	}
+
+	@media (max-width: 900px) {
+		.site-footer__grid {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.site-footer__grid {
+			grid-template-columns: 1fr;
+			gap: 2.25rem;
+		}
+	}
+</style>

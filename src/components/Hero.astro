@@ -1,0 +1,143 @@
+---
+---
+
+<section class="hero bg-grid-dark">
+	<div class="hero__contours" aria-hidden="true">
+		<svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+			<path d="M-20 380 C 150 320, 250 420, 420 360 S 700 300, 830 340" />
+			<path d="M-20 300 C 180 250, 260 340, 440 280 S 720 230, 830 260" />
+			<path d="M-20 220 C 200 180, 280 250, 460 200 S 740 160, 830 190" />
+		</svg>
+	</div>
+
+	<div class="container hero__inner">
+		<p class="eyebrow eyebrow--light">Gaziantep &middot; Harita Mühendisliği</p>
+		<h1>
+			Doğru Ölçüm.<br />
+			Güvenilir Zemin.<br />
+			Net Sonuç.
+		</h1>
+		<p class="hero__desc">
+			Gaziantep merkezli DüzlemSa Harita, parsel uygulamalarından şantiye ölçümlerine, imar
+			süreçlerinden teknik harita üretimine kadar güvenilir mühendislik hizmetleri sunar.
+		</p>
+		<div class="hero__actions">
+			<a href="#iletisim" class="btn btn-primary">Teklif Al</a>
+			<a href="https://wa.me/905388751998" target="_blank" rel="noopener" class="btn btn-outline-light">
+				WhatsApp'tan Bilgi Al
+			</a>
+		</div>
+
+		<dl class="hero__coords">
+			<div>
+				<dt>Konum</dt>
+				<dd>37.06&deg; N, 37.38&deg; E</dd>
+			</div>
+			<div>
+				<dt>Merkez</dt>
+				<dd>Şehitkamil / Gaziantep</dd>
+			</div>
+			<div>
+				<dt>Deneyim</dt>
+				<dd>4 Yıl</dd>
+			</div>
+		</dl>
+	</div>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		background: var(--color-charcoal);
+		color: var(--color-warm-white);
+		overflow: hidden;
+		padding-block: clamp(4.5rem, 10vw, 8rem) clamp(3.5rem, 8vw, 6rem);
+	}
+
+	.hero__contours {
+		position: absolute;
+		inset: 0;
+		opacity: 0.5;
+	}
+
+	.hero__contours svg {
+		width: 100%;
+		height: 100%;
+	}
+
+	.hero__contours path {
+		fill: none;
+		stroke: rgba(142, 31, 45, 0.45);
+		stroke-width: 1.4;
+	}
+
+	.hero__contours path:nth-child(2) {
+		stroke: rgba(159, 179, 106, 0.3);
+	}
+
+	.hero__contours path:nth-child(3) {
+		stroke: rgba(246, 243, 238, 0.12);
+	}
+
+	.hero__inner {
+		position: relative;
+		max-width: 720px;
+	}
+
+	.eyebrow--light {
+		color: var(--color-accent-olive);
+	}
+
+	.eyebrow--light::before {
+		background: var(--color-accent-olive);
+	}
+
+	.hero h1 {
+		color: var(--color-warm-white);
+	}
+
+	.hero__desc {
+		margin-top: 1.5rem;
+		font-size: 1.1rem;
+		line-height: 1.75;
+		color: rgba(246, 243, 238, 0.8);
+		max-width: 56ch;
+	}
+
+	.hero__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-top: 2.25rem;
+	}
+
+	.hero__coords {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2.5rem;
+		margin-top: 3.5rem;
+		padding-top: 2rem;
+		border-top: 1px solid rgba(246, 243, 238, 0.15);
+	}
+
+	.hero__coords dt {
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: rgba(246, 243, 238, 0.5);
+		margin-bottom: 0.3rem;
+	}
+
+	.hero__coords dd {
+		margin: 0;
+		font-weight: 700;
+		font-size: 1rem;
+		color: var(--color-warm-white);
+	}
+
+	@media (max-width: 640px) {
+		.hero__actions .btn {
+			width: 100%;
+		}
+	}
+</style>

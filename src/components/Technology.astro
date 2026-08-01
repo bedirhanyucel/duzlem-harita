@@ -1,0 +1,126 @@
+---
+import Icon from './Icon.astro';
+
+const equipment = [
+	{ icon: 'satellite', label: 'GNSS / RTK Ölçüm Sistemleri' },
+	{ icon: 'target', label: 'Total Station' },
+	{ icon: 'ruler', label: 'Dijital ve Optik Nivo' },
+	{ icon: 'drone', label: 'Drone Destekli Ölçüm Sistemleri' },
+	{ icon: 'compass', label: 'Lazer Mesafe Ölçüm Cihazları' },
+	{ icon: 'cpu', label: 'Teknik Veri İşleme Altyapısı' },
+];
+
+const software = ['Netcad', 'AutoCAD', 'Civil 3D', 'ArcGIS', 'QGIS', 'Pix4D', 'Agisoft Metashape'];
+---
+
+<section class="tech" id="teknoloji">
+	<div class="container">
+		<div class="section-head section-head--center">
+			<p class="eyebrow" style="justify-content:center">Teknoloji</p>
+			<h2>Kullandığımız ekipman ve yazılımlar</h2>
+			<p class="section-desc">
+				Ölçüm hassasiyetini ve veri güvenilirliğini artırmak için güncel teknik altyapı
+				kullanıyoruz.
+			</p>
+		</div>
+
+		<div class="tech__layout">
+			<div class="tech__block">
+				<h3>Saha Ekipmanları</h3>
+				<ul class="tech__equipment">
+					{
+						equipment.map((e) => (
+							<li>
+								<Icon name={e.icon} class="tech__icon" />
+								<span>{e.label}</span>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+
+			<div class="tech__block">
+				<h3>Kullandığımız Yazılımlar</h3>
+				<ul class="tech__software">
+					{software.map((s) => <li>{s}</li>)}
+				</ul>
+				<p class="tech__note">Ofis ve raporlama yazılımları ile teknik veri düzenleme ve CAD/GIS çözümleri.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.tech__layout {
+		display: grid;
+		grid-template-columns: 1.2fr 0.8fr;
+		gap: 2.5rem;
+	}
+
+	.tech__block h3 {
+		font-size: 1rem;
+		margin-bottom: 1.25rem;
+		color: var(--color-primary);
+	}
+
+	.tech__equipment {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+	}
+
+	.tech__equipment li {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.9rem 1rem;
+		background: var(--bg-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		font-size: 0.87rem;
+		font-weight: 600;
+		color: var(--text-heading);
+	}
+
+	.tech__equipment :global(.tech__icon) {
+		width: 19px;
+		height: 19px;
+		flex-shrink: 0;
+		color: var(--color-primary);
+	}
+
+	.tech__software {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.tech__software li {
+		padding: 0.5rem 1rem;
+		background: var(--color-charcoal);
+		color: var(--color-warm-white);
+		border-radius: 999px;
+		font-size: 0.85rem;
+		font-weight: 600;
+	}
+
+	.tech__note {
+		font-size: 0.86rem;
+		color: var(--text-body);
+		line-height: 1.6;
+	}
+
+	@media (max-width: 900px) {
+		.tech__layout {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.tech__equipment {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

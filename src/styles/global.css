@@ -1,0 +1,271 @@
+/* ==========================================================================
+   DüzlemSa Harita — Global Design System
+   ========================================================================== */
+
+:root {
+	/* Brand colors */
+	--color-primary: #8e1f2d;
+	--color-primary-dark: #6c1723;
+	--color-primary-light: #a53245;
+	--color-charcoal: #14181b;
+	--color-charcoal-soft: #1e2327;
+	--color-warm-white: #f6f3ee;
+	--color-soft-gray: #d9d6d1;
+	--color-text-gray: #5b6168;
+	--color-accent-olive: #9fb36a;
+
+	--color-white: #ffffff;
+	--color-border: #e3dfd7;
+
+	/* Semantic aliases */
+	--bg-page: var(--color-warm-white);
+	--bg-surface: var(--color-white);
+	--bg-dark: var(--color-charcoal);
+	--text-heading: var(--color-charcoal);
+	--text-body: var(--color-text-gray);
+
+	/* Typography */
+	--font-sans:
+		-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	--font-heading: var(--font-sans);
+
+	/* Spacing / layout */
+	--container-width: 1200px;
+	--section-padding-y: clamp(3.5rem, 6vw, 6.5rem);
+	--radius-sm: 6px;
+	--radius-md: 10px;
+	--radius-lg: 16px;
+
+	--shadow-sm: 0 1px 2px rgba(20, 24, 27, 0.06);
+	--shadow-md: 0 8px 24px rgba(20, 24, 27, 0.08);
+	--shadow-lg: 0 16px 40px rgba(20, 24, 27, 0.12);
+
+	color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+	scroll-padding-top: 88px;
+}
+
+body {
+	margin: 0;
+	background: var(--bg-page);
+	color: var(--text-body);
+	font-family: var(--font-sans);
+	font-size: 1rem;
+	line-height: 1.65;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+img,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+a {
+	color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: var(--font-heading);
+	color: var(--text-heading);
+	line-height: 1.15;
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	margin: 0;
+}
+
+h1 {
+	font-size: clamp(2.1rem, 4.5vw, 3.4rem);
+}
+
+h2 {
+	font-size: clamp(1.7rem, 3vw, 2.4rem);
+}
+
+h3 {
+	font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+}
+
+p {
+	margin: 0;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+button {
+	font-family: inherit;
+}
+
+/* ---------- Layout helpers ---------- */
+
+.container {
+	width: 100%;
+	max-width: var(--container-width);
+	margin-inline: auto;
+	padding-inline: 1.5rem;
+}
+
+.section {
+	padding-block: var(--section-padding-y);
+}
+
+.section--alt {
+	background: var(--bg-surface);
+	border-block: 1px solid var(--color-border);
+}
+
+.section-head {
+	max-width: 640px;
+	margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.section-head--center {
+	max-width: 680px;
+	margin-inline: auto;
+	text-align: center;
+}
+
+.eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.8rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--color-primary);
+	margin-bottom: 0.75rem;
+}
+
+.eyebrow::before {
+	content: '';
+	width: 22px;
+	height: 2px;
+	background: var(--color-primary);
+	display: inline-block;
+}
+
+.section-desc {
+	margin-top: 0.85rem;
+	color: var(--text-body);
+	font-size: 1.05rem;
+	line-height: 1.7;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.85rem 1.6rem;
+	border-radius: var(--radius-sm);
+	font-weight: 600;
+	font-size: 0.95rem;
+	text-decoration: none;
+	border: 1px solid transparent;
+	cursor: pointer;
+	transition:
+		background-color 0.15s ease,
+		border-color 0.15s ease,
+		color 0.15s ease;
+	white-space: nowrap;
+}
+
+.btn-primary {
+	background: var(--color-primary);
+	color: var(--color-white);
+}
+
+.btn-primary:hover {
+	background: var(--color-primary-dark);
+}
+
+.btn-outline {
+	background: transparent;
+	border-color: var(--color-soft-gray);
+	color: var(--text-heading);
+}
+
+.btn-outline:hover {
+	border-color: var(--color-primary);
+	color: var(--color-primary);
+}
+
+.btn-outline-light {
+	background: transparent;
+	border-color: rgba(246, 243, 238, 0.35);
+	color: var(--color-warm-white);
+}
+
+.btn-outline-light:hover {
+	border-color: var(--color-warm-white);
+	background: rgba(246, 243, 238, 0.08);
+}
+
+.btn-ghost-light {
+	background: transparent;
+	color: var(--color-warm-white);
+	padding-inline: 0.25rem;
+}
+
+/* ---------- Cards ---------- */
+
+.card {
+	background: var(--bg-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	padding: 1.75rem;
+}
+
+/* ---------- Grid / topo texture helpers ---------- */
+
+.bg-grid {
+	background-image:
+		linear-gradient(to right, rgba(217, 214, 209, 0.5) 1px, transparent 1px),
+		linear-gradient(to bottom, rgba(217, 214, 209, 0.5) 1px, transparent 1px);
+	background-size: 42px 42px;
+}
+
+.bg-grid-dark {
+	background-image:
+		linear-gradient(to right, rgba(246, 243, 238, 0.07) 1px, transparent 1px),
+		linear-gradient(to bottom, rgba(246, 243, 238, 0.07) 1px, transparent 1px);
+	background-size: 42px 42px;
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+@media (max-width: 640px) {
+	:root {
+		--section-padding-y: 3rem;
+	}
+}

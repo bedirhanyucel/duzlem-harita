@@ -1,0 +1,82 @@
+---
+const steps = [
+	{ n: '01', title: 'İhtiyacı Dinliyoruz', desc: 'Proje kapsamını ve beklentilerinizi birlikte netleştiriyoruz.' },
+	{ n: '02', title: 'Teknik Kapsamı Belirliyoruz', desc: 'Uygulanacak yöntem, ekipman ve zaman planını çıkarıyoruz.' },
+	{ n: '03', title: 'Saha ve Ofis Çalışmasını Yürütüyoruz', desc: 'Ölçüm, hesap ve çizim süreçlerini kontrollü şekilde ilerletiyoruz.' },
+	{ n: '04', title: 'Sonuçları Teslim Ediyoruz', desc: 'Kullanılabilir, anlaşılır ve ilgili kuruma uygun teslimler sağlıyoruz.' },
+];
+---
+
+<section class="process section--alt">
+	<div class="container">
+		<div class="section-head section-head--center">
+			<p class="eyebrow" style="justify-content:center">Çalışma Süreci</p>
+			<h2>Net ve kontrollü bir süreç izliyoruz</h2>
+		</div>
+
+		<ol class="process__list">
+			{
+				steps.map((s) => (
+					<li class="process__step">
+						<span class="process__num">{s.n}</span>
+						<h3>{s.title}</h3>
+						<p>{s.desc}</p>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>
+
+<style>
+	.process__list {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1.5rem;
+		counter-reset: step;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.process__step {
+		position: relative;
+		padding: 1.75rem 1.5rem 1.5rem;
+		background: var(--bg-page);
+		border: 1px solid var(--color-border);
+		border-top: 3px solid var(--color-primary);
+		border-radius: var(--radius-md);
+	}
+
+	.process__num {
+		display: block;
+		font-size: 1.6rem;
+		font-weight: 800;
+		color: var(--color-soft-gray);
+		margin-bottom: 0.75rem;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.process__step h3 {
+		font-size: 1rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.process__step p {
+		font-size: 0.88rem;
+		color: var(--text-body);
+		line-height: 1.6;
+	}
+
+	@media (max-width: 900px) {
+		.process__list {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 520px) {
+		.process__list {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

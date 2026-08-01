@@ -1,0 +1,110 @@
+---
+import Icon from './Icon.astro';
+
+const projects = [
+	{ icon: 'building', title: 'Endüstriyel Tesis Ölçüm Çalışmaları', desc: 'Endüstriyel alanlarda hassas ölçüm ve teknik veri üretimi.' },
+	{ icon: 'crane', title: 'Yapı Aplikasyon ve Şantiye Uygulamaları', desc: 'İnşaat süreçlerinde aplikasyon ve saha kontrol çalışmaları.' },
+	{ icon: 'layers', title: 'Parsel ve İmar Süreçleri', desc: 'İfraz, tevhit ve imar uygulamalarına yönelik teknik çalışmalar.' },
+];
+---
+
+<section class="projects section--alt" id="projeler">
+	<div class="container">
+		<div class="section-head section-head--center">
+			<p class="eyebrow" style="justify-content:center">Projeler</p>
+			<h2>Çalışma alanlarımızdan örnekler</h2>
+			<p class="section-desc">
+				Proje bazlı referans detayları hazırlanıyor. Aşağıdaki başlıklar, hizmet verdiğimiz
+				çalışma alanlarını temsil etmektedir.
+			</p>
+		</div>
+
+		<div class="projects__grid">
+			{
+				projects.map((p) => (
+					<article class="project-card">
+						<div class="project-card__visual" aria-hidden="true">
+							<Icon name={p.icon} />
+						</div>
+						<div class="project-card__body">
+							<h3>{p.title}</h3>
+							<p>{p.desc}</p>
+							<span class="project-card__tag">Detaylar yakında eklenecek</span>
+						</div>
+					</article>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.projects__grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.75rem;
+	}
+
+	.project-card {
+		background: var(--bg-page);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+	}
+
+	.project-card__visual {
+		height: 140px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background:
+			linear-gradient(135deg, rgba(142, 31, 45, 0.92), rgba(20, 24, 27, 0.95)),
+			repeating-linear-gradient(
+				45deg,
+				rgba(246, 243, 238, 0.06) 0,
+				rgba(246, 243, 238, 0.06) 1px,
+				transparent 1px,
+				transparent 14px
+			);
+		color: var(--color-warm-white);
+	}
+
+	.project-card__visual :global(svg) {
+		width: 40px;
+		height: 40px;
+	}
+
+	.project-card__body {
+		padding: 1.5rem;
+	}
+
+	.project-card__body h3 {
+		font-size: 1.02rem;
+		margin-bottom: 0.6rem;
+	}
+
+	.project-card__body p {
+		font-size: 0.9rem;
+		color: var(--text-body);
+		line-height: 1.6;
+		margin-bottom: 1rem;
+	}
+
+	.project-card__tag {
+		display: inline-block;
+		font-size: 0.75rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		color: var(--color-primary);
+		border: 1px solid var(--color-primary);
+		border-radius: 999px;
+		padding: 0.3rem 0.75rem;
+	}
+
+	@media (max-width: 900px) {
+		.projects__grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

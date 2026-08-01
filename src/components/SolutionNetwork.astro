@@ -1,0 +1,105 @@
+---
+import Icon from './Icon.astro';
+
+const nodes = [
+	{ icon: 'compass', label: 'Harita Mühendisliği Uzmanlığı' },
+	{ icon: 'crane', label: 'Deneyimli Saha Ekipleri' },
+	{ icon: 'building', label: 'Mimari Çözüm Ortakları' },
+	{ icon: 'shield', label: 'Hukuki Danışmanlık Ağı' },
+	{ icon: 'network', label: 'Disiplinler Arası Proje Koordinasyonu' },
+];
+---
+
+<section class="network">
+	<div class="container">
+		<div class="network__layout">
+			<div class="network__intro">
+				<p class="eyebrow eyebrow--light">Çözüm Ağı</p>
+				<h2>Tek başına değil, bir ağla çalışıyoruz</h2>
+				<p class="network__quote">
+					"DüzlemSa Harita, yalnızca saha ölçümü yapan bir ofis değil; mimari ve hukuki çözüm
+					ortaklarıyla birlikte hareket eden entegre bir proje yapısı sunar."
+				</p>
+			</div>
+
+			<ul class="network__nodes">
+				{
+					nodes.map((n) => (
+						<li>
+							<Icon name={n.icon} class="network__icon" />
+							<span>{n.label}</span>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</section>
+
+<style>
+	.network {
+		background: var(--color-charcoal);
+		color: var(--color-warm-white);
+		padding-block: var(--section-padding-y);
+	}
+
+	.network__layout {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3rem;
+		align-items: center;
+	}
+
+	.eyebrow--light {
+		color: var(--color-accent-olive);
+	}
+
+	.eyebrow--light::before {
+		background: var(--color-accent-olive);
+	}
+
+	.network h2 {
+		color: var(--color-warm-white);
+	}
+
+	.network__quote {
+		margin-top: 1.5rem;
+		font-size: 1.05rem;
+		line-height: 1.75;
+		color: rgba(246, 243, 238, 0.75);
+		font-style: italic;
+		border-left: 2px solid var(--color-primary);
+		padding-left: 1.25rem;
+	}
+
+	.network__nodes {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.network__nodes li {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem 1.25rem;
+		background: rgba(246, 243, 238, 0.04);
+		border: 1px solid rgba(246, 243, 238, 0.12);
+		border-radius: var(--radius-md);
+		font-weight: 600;
+		font-size: 0.95rem;
+	}
+
+	.network__nodes :global(.network__icon) {
+		width: 22px;
+		height: 22px;
+		flex-shrink: 0;
+		color: var(--color-accent-olive);
+	}
+
+	@media (max-width: 900px) {
+		.network__layout {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
